@@ -207,34 +207,6 @@ tmp <- focus_AApower %>%
   arrange(desc(PIP)) %>%
   mutate(rank = row_number())
 
-# # PIP count
-# a <- tmp %>%
-#   # filter(POP %in% "ME") %>%
-#   filter(!grepl("NULL", ID)) %>%
-#   group_by(PHEN, BLOCK, POP) %>%
-#   summarize(cgs = n()) %>%
-#   mutate(PHEN = factor(PHEN, levels = phens))
-# 
-# ps141 <- ggplot(a, aes(x = cgs, group = POP, fill = POP)) +
-#   scale_fill_manual(values = COLS3, labels = LABELS3) +
-#   geom_bar() +
-#   theme_ma() +
-#   ylab("Count") +
-#   xlab("90% credible set size without null models") +
-#   scale_x_continuous(breaks = seq(1,8), label = seq(1, 8))
-# 
-# # ps142 <- ggplot(a, aes(x = cgs)) +
-# #   geom_bar() +
-# #   theme_ma() +
-# #   facet_wrap(~PHEN, nrow = 3) +
-# #   ylab("Count") +
-# #   xlab("90% credible set size without null models") +
-# #   scale_x_continuous(breaks = seq(1,8), label = seq(1, 8))
-# 
-# ps14 <- ggarrange(ps141, ps142, nrow = 2, labels = c("A", "B"), heights = c(1.3, 3),
-#   font.label = list(size = arrange_label_size))
-# ggsave("figure-s14.png", plot = ps14, path = "../plot/", height = two_row_height, width = two_col)
-
 # average PIP
 a <- tmp %>%
   # filter(POP %in% "ME") %>%
@@ -256,28 +228,6 @@ ps15 <- ggplot(a, aes(x = rank, y = pip, group = POP, color = POP)) +
   ylab("PIP in 90% CS") +
   scale_x_continuous(breaks = seq(1,9), label = seq(1, 9)) +
   theme_ma()
-
-# a <- tmp %>%
-#   filter(POP %in% "ME") %>%
-#   # filter(!grepl("NULL", ID)) %>%
-#   select(PHEN, ID, PIP, rank) %>%
-#   group_by(PHEN, rank, PIP) %>%
-#   distinct() %>%
-#   group_by(rank, PHEN) %>%
-#   summarize(pip = mean(PIP),
-#     n = n(),
-#     se = sd(PIP)/sqrt(n)) %>%
-#   mutate(PHEN = factor(PHEN, levels = phens))
-# 
-# ps152 <- ggplot(a, aes(x = rank, y = pip)) +
-#   geom_point() +
-#   theme_ma() +
-#   facet_wrap(~PHEN, nrow = 3) +
-#   geom_errorbar(aes(ymin = pip - se, ymax = pip + se), width = 1) +
-#   ylim(0, 1) +
-#   xlab("Rank of model PIP in 90% CS") +
-#   ylab("PIP in 90% CS") +
-#   scale_x_continuous(breaks = seq(1,9), label = seq(1, 9))
 
 
 # ps15 <- ggarrange(ps151, ps152, nrow = 2, labels = c("A", "B"), heights = c(1.3, 3),
@@ -322,22 +272,6 @@ p1 <- ggplot(mA, aes(x = POP, y = pip, fill = POP, group = POP)) +
   scale_fill_manual(values = c("Mean"="white", "Median"="black")) +
   scale_y_continuous(name = ylabel_PIP)
 
-# # by trait
-# ps1 <- ggplot(mA, aes(x = POP, y = pip, fill = POP, group = POP)) +
-#   scale_fill_manual(values = COLS2, labels = LABELS2) +
-#   geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
-#   geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
-#   facet_wrap(~ PHEN, nrow=3) +
-#   theme_pip() +
-#   new_scale_fill() +
-#   stat_summary(fun = mean, geom = "point",  aes(fill = "Mean"), size = mean_size, shape = mean_shape,
-#     position = position_dodge(width = 0.3)) +
-#   stat_summary(fun = median, geom = "point", aes(fill = "Median"), shape = median_shape, size = median_size,
-#     position = position_dodge(width = 0.3)) +
-#   scale_fill_manual(values = c("Mean"="white", "Median"="black")) +
-#   scale_y_continuous(name = ylabel_PIP)
-
-
 # sd
 mB <- tmp %>%
   filter(!grepl("NULL", ID)) %>%
@@ -359,20 +293,6 @@ p2 <- ggplot(mB, aes(x = POP, y = sdPIP, fill = POP, group = POP)) +
   scale_fill_manual(values = c("Mean"="white", "Median"="black")) +
   scale_y_continuous(name = ylabel_SD)
 
-# # by trait
-# ps2 <- ggplot(mB, aes(x = POP, y = sdPIP, fill = POP, group = POP)) +
-#   scale_fill_manual(values = COLS2, labels = LABELS2) +
-#   geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
-#   facet_wrap(~ PHEN, nrow=3) +
-#   theme_pip() +
-#   new_scale_fill() +
-#   stat_summary(fun = mean, geom = "point",  aes(fill = "Mean"), size = mean_size, shape = mean_shape,
-#     position = position_dodge(width = 0.3)) +
-#   stat_summary(fun = median, geom = "point", aes(fill = "Median"), shape = median_shape, size = median_size,
-#     position = position_dodge(width = 0.3)) +
-#   scale_fill_manual(values = c("Mean"="white", "Median"="black")) +
-#   scale_y_continuous(name = ylabel_SD)
-
 # size
 
 mC1 <- tmp %>%
@@ -384,16 +304,6 @@ mC1 <- tmp %>%
   mutate(POP = factor(POP, levels = c("EA", "AA", "ME", "meta"),
     labels = c("pop1.pip", "pop2.pip", "ME.pip", "meta.pip")))
 
-# haha <- ggplot(mC1, aes(x = cgs, y = cc, fill = POP, group = POP)) +
-#   scale_fill_manual(values = COLS2, labels = LABELS2) +
-#   geom_col( alpha = 0.8, position=position_dodge2(preserve = "single")) +
-#   theme_corr() +
-#   theme(legend.position = "none") +
-#   new_scale_fill() +
-#   scale_y_continuous(name = "Count") +
-#   scale_x_continuous(name = "90% Credible set size without null models", breaks = 1:10, labels = 1:10)
-# 
-# ggsave("pres.png", plot = haha, path = "../plot/", height = one_row_height, width = one_col)
 
 p3 <- ggplot(mC1, aes(x = cgs, y = cc, fill = POP, group = POP)) +
   scale_fill_manual(values = COLS2, labels = LABELS2) +
@@ -403,25 +313,7 @@ p3 <- ggplot(mC1, aes(x = cgs, y = cc, fill = POP, group = POP)) +
   scale_y_continuous(name = "Count") +
   scale_x_continuous(name = "90% Credible set size without null models", breaks = 1:10, labels = 1:10)
 
-# # by trait
-# mC2 <- tmp %>%
-#   filter(!grepl("NULL", ID)) %>%
-#   group_by(PHEN, BLOCK, POP) %>%
-#   summarize(cgs = n()) %>%
-#   group_by(POP, PHEN, cgs) %>%
-#   summarize(cc = n()) %>%
-#   mutate(PHEN = factor(PHEN, levels = phens),
-#     POP = factor(POP, levels = c("EA", "AA", "ME", "meta"),
-#       labels = c("pop1.pip", "pop2.pip", "ME.pip", "meta.pip")))
-# 
-# ps3 <- ggplot(mC2, aes(x = cgs, y = cc, fill = POP, group = POP)) +
-#   scale_fill_manual(values = COLS2, labels = LABELS2) +
-#   geom_col( alpha = 0.8, position=position_dodge2(preserve = "single")) +
-#   theme_corr() +
-#   new_scale_fill() +
-#   scale_y_continuous(name = "Count") +
-#   scale_x_continuous(name = "90% Credible set size without null models", breaks = 1:10, labels = 1:10) +
-#   facet_wrap(~ PHEN, nrow=3) 
+
 
 p6 <- ggarrange(ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, 
   font.label = list(size = arrange_label_size), legend = "none"),
@@ -430,11 +322,6 @@ p6 <- ggarrange(ggarrange(p1, p2, labels = c("A", "B"), ncol = 2,
 
 ggsave("figure-m6.png", plot = p6, path = "../plot/", height = two_row_height, width = two_col)
 
-
-# ggsave("figure-s17.png", plot = ps1, path = "../plot/", height = two_row_height, width = two_col)
-# ggsave("figure-s18.png", plot = ps2, path = "../plot/", height = two_row_height, width = two_col)
-# ggsave("figure-s19.png", plot = ps3, path = "../plot/", height = two_row_height, width = two_col)
-# # ggsave("figure-s20.png", plot = ps4, path = "../plot/", height = two_row_height, width = two_col)
 
 # PIP correlation
 # aggregate
