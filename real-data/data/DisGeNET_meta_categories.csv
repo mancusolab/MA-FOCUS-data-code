@@ -1,0 +1,129 @@
+Term,UMLS CUI,MedGen_UID,HP/EFO,DOID,meta_category
+Amyloidosis,C0002726,272,,9120,Abnormality of metabolism/homeostasis
+Ketosis,C0022638,7206,,,Abnormality of metabolism/homeostasis
+Lactic acidemia,C0347959,1717,,,Abnormality of metabolism/homeostasis
+Metabolic Syndrome X,C0524620,99356,,,Abnormality of metabolism/homeostasis
+Dupuytren's Disease,C4082974,41672,,,Abnormality of the musculoskeletal system
+Aplasia/Hypoplasia of the distal phalanges of the hand,C1861336,396110,,,Abnormality of the musculoskeletal system
+Foot dorsiflexor weakness,C1866141,356163,,,Abnormality of the musculoskeletal system
+Foot-drop,,,,,Abnormality of the musculoskeletal system
+Generalized hypotonia,C1858120,346841,,,Abnormality of the musculoskeletal system
+Long foot,C0576225,154365,HP:0001833,,Abnormality of the musculoskeletal system
+Muscle Spasticity,C0026838,7753,,,Abnormality of the musculoskeletal system
+Opisthotonus,C0151818,56246,,,Abnormality of the musculoskeletal system
+Small head,C0424688,,,,Abnormality of the musculoskeletal system
+Splenomegaly,C0038002,52469,,,Abnormality or disease of blood and blood-forming tissues
+Decreased platelet count,C0040034,52737,,,Abnormality or disease of blood and blood-forming tissues
+Hemolytic-Uremic Syndrome,C0019061,42403,,,Abnormality or disease of blood and blood-forming tissues
+leukemia,C0023418,9725,,,Abnormality or disease of blood and blood-forming tissues
+Lymphoma,C0024299,44223,,,Abnormality or disease of blood and blood-forming tissues
+"Lymphoma, Non-Hodgkin",C0024305,6160,,,Abnormality or disease of blood and blood-forming tissues
+Multiple Myeloma,C0026764,10122,,,Abnormality or disease of blood and blood-forming tissues
+Thrombocytopenia,C0040034,52737,,,Abnormality or disease of blood and blood-forming tissues
+Thrombotic Microangiopathies,C2717961,403479,,,Abnormality or disease of blood and blood-forming tissues
+HELLP Syndrome,C0162739,58162,EFO:0007297,,Abnormality or disease of blood and blood-forming tissues
+Hyperammonemia,C0220994,113136,,,Abnormality or disease of blood and blood-forming tissues
+Hypercholesterolemia,C0020443,312004,,,Abnormality or disease of blood and blood-forming tissues
+"Lupus Erythematosus, Systemic",C0409974,,EFO:0002690,,Abnormality or disease of blood and blood-forming tissues
+Coronary Artery Disease,C1956346,365486,,,Abnormality or disorder of the cardiovascular system
+Mitral Valve Stenosis,C0026269,44466,,,Abnormality or disorder of the cardiovascular system
+Myocardial Ischemia,C0151744,101801,,,Abnormality or disorder of the cardiovascular system
+Myocarditis,C0027059,44553,,,Abnormality or disorder of the cardiovascular system
+Rheumatic disease of heart valve,C0264757,538816,EFO:1001161,,Abnormality or disorder of the cardiovascular system
+Thromboangiitis Obliterans,C0040021,21531,,,Abnormality or disorder of the cardiovascular system
+Biliary cirrhosis,C0023892,44182,,,Abnormality or disorder of the digestive system
+"Cholangitis, Sclerosing",C0008313,,,,Abnormality or disorder of the digestive system
+"Chronic Infantile Neurological, Cutaneous, and Articular Syndrome",C0409818,3036,,,Abnormality or disorder of the digestive system
+Colitis,,40385,,,Abnormality or disorder of the digestive system
+Crohn Disease,C0010346,3664,,,Abnormality or disorder of the digestive system
+Feeding difficulties,C0232466,65429,,,Abnormality or disorder of the digestive system
+Hepatomegaly,C0019209,42428,,,Abnormality or disorder of the digestive system
+Liver Failure,C0085605,88444,HP:0001399,HP:0001399,Abnormality or disorder of the digestive system
+Primary sclerosing cholangitis,C0566602,107565,,,Abnormality or disorder of the digestive system
+Ankylosing spondylitis,C0038013,11561,,7147,"Abnormality, disorder, or disease of the immune system"
+Autoimmune Diseases,C0004364,2135,,,"Abnormality, disorder, or disease of the immune system"
+"Diabetes Mellitus, Insulin-Dependent",C0011854,41522,,,"Abnormality, disorder, or disease of the immune system"
+Graves Disease,C0018213,6677,,,"Abnormality, disorder, or disease of the immune system"
+Hypersensitivity,C0020517,,,,"Abnormality, disorder, or disease of the immune system"
+Inflammatory disorder,C1290884,,EFO:0009903,,"Abnormality, disorder, or disease of the immune system"
+Juvenile rheumatoid arthritis,C3714757,811462,,,"Abnormality, disorder, or disease of the immune system"
+Muckle-Wells Syndrome,C0268390,120634,,,"Abnormality, disorder, or disease of the immune system"
+Multiple Sclerosis,C0026769,10123,,,"Abnormality, disorder, or disease of the immune system"
+"Multiple Sclerosis, Acute Fulminating",C0751324,148280,,,"Abnormality, disorder, or disease of the immune system"
+Nephropathia Epidemica,C0242993,495,,,"Abnormality, disorder, or disease of the immune system"
+Opticospinal Multiple Sclerosis,C3711850,778458,,,"Abnormality, disorder, or disease of the immune system"
+Psoriasis,C0033860,10997,,,"Abnormality, disorder, or disease of the immune system"
+Recurrent respiratory infections,C3806482,812812,,,"Abnormality, disorder, or disease of the immune system"
+Rheumatism,C0035435,,,,"Abnormality, disorder, or disease of the immune system"
+Rheumatoid Arthritis,C0003873,,EFO:0000685,,"Abnormality, disorder, or disease of the immune system"
+Systemic Scleroderma,C0036421,19897,,,"Abnormality, disorder, or disease of the immune system"
+Vitiligo,C0042900,22677,EFO:0004208,,"Abnormality, disorder, or disease of the immune system"
+Body mass index,C1305855,,,,Anthropometric measurement
+"Congenital, Hereditary, and Neonatal Diseases and Abnormalities",C0027612,14319,,,"Congenital, hereditary, and neonatal diseases and abnormalities"
+Gilbert Disease (disorder),C0017551,4891,,,"Congenital, hereditary, and neonatal diseases and abnormalities"
+Lysosomal Storage Diseases,C0085078,43098,,,"Congenital, hereditary, and neonatal diseases and abnormalities"
+Chest Pain,C0008031,2992,,,Constitutional symptom
+IGA Glomerulonephritis,C0017661,,EFO:0004194,,Disease of the urinary system
+Allergic asthma,C0155877,102343,,9415,Disease or disorder of the respiratory system
+High altitude pulmonary edema,C0340100,83314,EFO:1002002,,Disease or disorder of the respiratory system
+"Lung Diseases, Interstitial",C0024115,60064,,,Disease or disorder of the respiratory system
+Pneumonia,C0032285,10813,,,Disease or disorder of the respiratory system
+Inflammatory Bowel Diseases,C0021390,43877,,,Disorder of the gastrointestinal tract
+Babinski Reflex,C0034935,19708,,,Disorder of the nervous system
+Cerebral atrophy,C0235946,116012,HP:0002059,,Disorder of the nervous system
+Cognitive delay,,,,,Disorder of the nervous system
+Degenerative brain disorder,C0154671,56343,,,Disorder of the nervous system
+Dystonia,C0013421,3940,,,Disorder of the nervous system
+Dystonic disease,,,,,Disorder of the nervous system
+"Epilepsy, Temporal Lobe",C0014556,4990,,,Disorder of the nervous system
+Epileptic encephalopathy,C0543888,452596,,,Disorder of the nervous system
+Global developmental delay,C0557874,107838,,,Disorder of the nervous system
+Hypoplasia of corpus callosum,C0344482,138005,HP:0002079,,Disorder of the nervous system
+Lethargy,C0023380,7310,,,Disorder of the nervous system
+Leukodystrophy,C0023520,6070,,,Disorder of the nervous system
+Mental and motor retardation,,,,,Disorder of the nervous system
+nervous system disorder,C0027765,14336,,,Disorder of the nervous system
+Neurodegenerative Disorders,C0524851,101195,,,Disorder of the nervous system
+Post-Traumatic Stress Disorder,C0038436,21345,,,Disorder of the nervous system
+Supratentorial atrophy,,116012,HP:0002059,,Disorder of the nervous system
+Blood basophil count (lab test),C0200641,,,,Hematological measurement
+Eosinophil count procedure,C0200638,,,,Hematological measurement
+Erythrocyte Mean Corpuscular Hemoglobin Test,C0369183,,,,Hematological measurement
+Finding of Mean Corpuscular Hemoglobin,C1261502,,,,Hematological measurement
+Granulocyte count,C0857490,,,,Hematological measurement
+Hematocrit procedure,C0018935,,,,Hematological measurement
+Hemoglobin measurement,C0518015,,,,Hematological measurement
+Lymphocyte Count measurement,C0200635,,,,Hematological measurement
+Mean corpuscular hemoglobin concentration determination,C0474535,,,,Hematological measurement
+Mean Corpuscular Volume (result),C0524587,,,,Hematological measurement
+Monocyte count procedure,C0200637,,,,Hematological measurement
+Neutrophil count (procedure),C0200633,,,,Hematological measurement
+Platelet Count measurement,C0032181,,,,Hematological measurement
+Platelet distribution width measurement,,,,,Hematological measurement
+Platelet hematocrit measurement,,,,,Hematological measurement
+Platelet mean volume determination (procedure),C0200665,,,,Hematological measurement
+Red Blood Cell Count measurement,C0014772,,,,Hematological measurement
+Red cell distribution width determination,C0427460,,,,Hematological measurement
+Reticulocyte count (procedure),C0206161,,,,Hematological measurement
+White Blood Cell Count procedure,C0023508,,,,Hematological measurement
+High density lipoprotein measurement,C0392885,,EFO:0004612,,Lipid or lipoprotein measurement
+B-Cell Lymphomas,C0079731,86953,,,Lymphoid neoplasm
+Diffuse Large B-Cell Lymphoma,C0079744,86954,,,Lymphoid neoplasm
+Mitochondrial Diseases,C0751651,155901,,,Mitochondrial Diseases
+Adult Solid Neoplasm,C0280099,83598,,,Other neoplasm
+Hereditary Diffuse Gastric Cancer,C1708349,310839,EFO:0000402,,Other neoplasm
+Lip and Oral Cavity Carcinoma,C0220641,67387,,,Other neoplasm
+Malignant neoplasm of breast,C0006142,651,EFO:0003869,,Other neoplasm
+Malignant tumor of peritoneum,C0153467,,,,Other neoplasm
+Mammary Neoplasms,,,,,Other neoplasm
+Prostate carcinoma,C0600139,108657,,,Other neoplasm
+Dengue Fever,C0011311,3721,,,Viral disease
+Hepatitis C,C0019196,,EFO:0003047,,Viral disease
+Severe Dengue,C0019100,5506,,,Viral disease
+Virus Diseases,C0042769,,,,Viral disease
+Dental White Spot,C0043154,21918,,,
+Eosinophil count result,,,,,
+Finding of body mass index,,,,,
+Monocyte count result,,,,,
+Platelet distribution width result,,,,,
+RDW - Red blood cell distribution width result,,,,,
