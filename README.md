@@ -36,44 +36,50 @@ Specify and run `/simulation/generate_param.R` to make parameter files.
 There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenarios:
 
 1. eur_afr: to run general 2-pop MA-FOCUS working with parameter files:
-  * `/simulation/codes/param/param_eur_afr_3pop.tsv`
-  * `/simulation/codes/param/param_eur_afr.tsv`
-  * `/simulation/codes/param/param_eur_afr_real.tsv`
+	
+	* `/simulation/codes/param/param_eur_afr_3pop.tsv`
+	
+	* `/simulation/codes/param/param_eur_afr.tsv`
+	
+	* `/simulation/codes/param/param_eur_afr_real.tsv`
 
   on python files:
-
-  * `/simulation/codes/python/mefocus_run_eur_afr.py`
-  * `/simulation/codes/python/mefocus_run_eur_real.py`
+  	
+  	* `/simulation/codes/python/mefocus_run_eur_afr.py`
+  	
+  	* `/simulation/codes/python/mefocus_run_eur_real.py`
 
 2. eur\_afr\_eas: to general run 3-pop MA-FOCUS working with parameter file:
-  * `/simulation/codes/param/param_eur_afr_eas.tsv`
+	
+	* `/simulation/codes/param/param_eur_afr_eas.tsv`
 
-  on python file:
-
-  * `/simulation/codes/python/mefocus_run_eur_afr_eas.py`
+  	on python file:
+  	
+  	* `/simulation/codes/python/mefocus_run_eur_afr_eas.py`
 
 3. pop2h2ge: to run 2-pop MA-FOCUS when 2nd population has different h2ge working with parameter file:
-  * `/simulation/codes/param/param_pop2h2ge.tsv`
 
-  on python file:
+	* `/simulation/codes/param/param_pop2h2ge.tsv`
 
-  * `/simulation/codes/python/mefocus_run_pop2h2ge.py`
+	on python file:
+
+	* `/simulation/codes/python/mefocus_run_pop2h2ge.py`
 
 4. pop2weights: to run 2-pop MA-FOCUS when 2nd population eQTL weights are not available and substituted by 1st population eQTL weights working with parameter file:
 
-  * `/simulation/codes/param/param_pop2weights.tsv`
+	* `/simulation/codes/param/param_pop2weights.tsv`
 
-  on python file:
+  	on python file:
 
-  * `/simulation/codes/python/mefocus_run_pop2weights.py`
+  	* `/simulation/codes/python/mefocus_run_pop2weights.py`
 
 5. proxy: to run 2-pop MA-FOCUS when a proxy tissue is used for eQTL weights for 2nd population working with parameter file:
 
-  * `/simulation/codes/param/param_proxy.tsv`
+  	* `/simulation/codes/param/param_proxy.tsv`
 
-  on python files:
+  	on python files:
 
-  * `/simulation/codes/python/mefocus_run_proxy.py`
+	* `/simulation/codes/python/mefocus_run_proxy.py`
 
 There are three dependent files for the MA-FOCUS simulation python files:
 
