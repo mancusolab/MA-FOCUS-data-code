@@ -55,7 +55,7 @@ There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenari
 	* `/simulation/codes/python/mefocus_run_pop2weights.py`
 
 5. proxy: to run 2-pop MA-FOCUS when a proxy tissue is used for eQTL weights for 2nd population working with parameter and python files:
-  * `/simulation/codes/param/param_proxy.tsv`
+	* `/simulation/codes/param/param_proxy.tsv`
 	* `/simulation/codes/python/mefocus_run_proxy.py`
 
 There are three dependent files for the MA-FOCUS simulation python files:
