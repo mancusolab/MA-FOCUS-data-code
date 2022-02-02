@@ -44,10 +44,10 @@ There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenari
 	* `/simulation/codes/param/param_eur_afr_real.tsv`
 
   on python files:
-  	
-  	* `/simulation/codes/python/mefocus_run_eur_afr.py`
-  	
-  	* `/simulation/codes/python/mefocus_run_eur_real.py`
+
+	* `/simulation/codes/python/mefocus_run_eur_afr.py`
+	
+	* `/simulation/codes/python/mefocus_run_eur_real.py`
 
 2. eur\_afr\_eas: to general run 3-pop MA-FOCUS working with parameter file:
 	
