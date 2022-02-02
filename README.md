@@ -2,7 +2,7 @@
 
 Please follow below instructions in order to replicate both our simulation and real-data results. We manage to make people replicate the results with minimum effort.
 
-If you have any questions, please contact Zeyun Lu at zeyunlu@usc.edu or Nicholas Mancuso at Nicholas.Mancuso@med.usc.edu. 
+If you have any questions, please contact Zeyun Lu at zeyunlu@usc.edu or Nicholas Mancuso at Nicholas.Mancuso@med.usc.edu.
 
 ## Simulation
 
@@ -18,7 +18,7 @@ You also need to have 1000G plink data for EUR, AFR, and EAS.
 
 We need to sample 100 population-wise independent genomic regions resulted from LDetect. Two bash scripts are used and dependent on:
 
-* `/simulation/codes/sample_regions/sample_genes.py` 
+* `/simulation/codes/sample_regions/sample_genes.py`
 * `/simulation/codes/sample_regions/grch37.eur.eas.afr.loci.bed` (For 3-pop MA-FOCUS)
 * `/simulation/codes/sample_regions/grch37.eur.afr.loci.bed ` (For 2-pop MA-FOCUS)
 
@@ -39,9 +39,9 @@ There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenari
   * `/simulation/codes/param/param_eur_afr_3pop.tsv`
   * `/simulation/codes/param/param_eur_afr.tsv`
   * `/simulation/codes/param/param_eur_afr_real.tsv`
-  
+
   on python files:
-  
+
   * `/simulation/codes/python/mefocus_run_eur_afr.py`
   * `/simulation/codes/python/mefocus_run_eur_real.py`
 
@@ -49,14 +49,14 @@ There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenari
   * `/simulation/codes/param/param_eur_afr_eas.tsv`
 
   on python file:
-  
+
   * `/simulation/codes/python/mefocus_run_eur_afr_eas.py`
 
 3. pop2h2ge: to run 2-pop MA-FOCUS when 2nd population has different h2ge working with parameter file:
   * `/simulation/codes/param/param_pop2h2ge.tsv`
 
   on python file:
-  
+
   * `/simulation/codes/python/mefocus_run_pop2h2ge.py`
 
 4. pop2weights: to run 2-pop MA-FOCUS when 2nd population eQTL weights are not available and substituted by 1st population eQTL weights working with parameter file:
@@ -110,19 +110,6 @@ The R codes that generate figures is in `/real-data/draw.R`, which depends on `/
 
 #### Manuscript
 
-The R codes that generate result section 3 and 4locates in `/real-data/sec3.R` and `/real-data/sec4.R`. All the required data locates in `/real-data/data/`.
+The R codes that generate result section 3 and 4 locates in `/real-data/sec3.R` and `/real-data/sec4.R`. All the required data locates in `/real-data/data/`.
 
 The order of the statistics may not match that in manuscript, but all the numbers should be covered by this script. Sometimes, the P-value is divided by two because we want to test one tail while the R regression results give us two tailed P-value.
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -642,4 +642,93 @@ ps18 <- ggplot(b, aes(x = logbf)) +
 ggsave("figure-s18.png", plot = ps18, path = "../plot/", height = one_row_height, width = one_col)
 
 
-# END
+
+
+# Last two supp figures
+
+### Load data, define functions ----
+load("focus.RData")
+focus_all <- as.data.frame(focus_AApower);rm(focus_AApower)
+
+# Negate function
+`%ni%` <- Negate(`%in%`)
+
+# PIP locus zoom plot function
+plot.locus.PIPs <- function(dat, tests, block, pheno, highlight.gene, colours=c("#e3d691BF", "#5ea9d4BF", "#d68592BF","#34ada1BF"), ...) {
+  dat2 <- dat[dat$BLOCK==block & dat$PHEN==pheno,]
+  ## Determine x-axis positions
+  x.pos <- apply(dat2[,c(grep("P0", colnames(dat2)), grep("P1", colnames(dat2)))], MARGIN=1, mean)
+  names(x.pos) <- dat2$ID; x.pos <- sort(x.pos)
+  # Plot null model at x=1
+  x.pos[1] <-1
+  # Start plotting genes at x=2
+  x.pos[-1] <- round(x.pos[-1]-x.pos[2]+2)
+  # Adjust spacing so total plot is 12 units wide
+  x.dist.adj <- as.numeric(max(x.pos) - x.pos[2])/10
+  x.pos[-(1:2)] <- signif(x.pos[-(1:2)]/x.dist.adj + x.pos[2],3)
+  ## Make plot
+  plot(x=x.pos, y=rep(0, length(x.pos)), ylim=c(0,1), type="n", xlab="", ylab="Posterior Inclusion Probability", xaxt="n", yaxt="n", ...)
+  abline(v=1.5, lwd=3)
+  axis(2, las=2)
+  axis(1, las=2, labels=names(x.pos[-match(highlight.gene, names(x.pos))]), at=x.pos[-match(highlight.gene, names(x.pos))], cex.axis=0.8)
+  axis(1, las=2, labels=highlight.gene, at=x.pos[highlight.gene], cex.axis=0.8, col.axis ="red", font=2)
+  for (test in tests) {
+    idx <- match(test, tests)
+    points(x.pos, dat2[match(names(x.pos),dat2$ID), paste0("PIP.",test)], pch=16, col=colours[idx], cex=1.4)
+  }
+}
+
+# P-value locus zoom plot function
+plot.locus.Pvals <- function(dat, tests, block, pheno, highlight.gene, colours=c("#e3d691BF", "#5ea9d4BF","#34ada1BF"), ...) {
+  dat2 <- dat[dat$BLOCK==block & dat$PHEN==pheno,]
+  ## Determine x-axis positions
+  x.pos <- apply(dat2[,c(grep("P0", colnames(dat2)), grep("P1", colnames(dat2)))], MARGIN=1, mean)
+  names(x.pos) <- dat2$ID; x.pos <- sort(x.pos)
+  # Plot null model at x=1
+  x.pos[1] <-1
+  # Start plotting genes at x=2
+  x.pos[-1] <- round(x.pos[-1]-x.pos[2]+2)
+  # Adjust spacing so total plot is 12 units wide
+  x.dist.adj <- as.numeric(max(x.pos) - x.pos[2])/10
+  x.pos[-(1:2)] <- signif(x.pos[-(1:2)]/x.dist.adj + x.pos[2],3)
+  ## Make plot
+  p.vals <- -log10(na.omit(unlist(dat2[,grep("P.val", colnames(dat2))])))
+  y.lim <- c(0, max(p.vals[is.finite(p.vals)]))
+  y.lim[2] <- y.lim[2] * 1.01
+  plot(x=x.pos, y=rep(0, length(x.pos)), ylim=y.lim, type="n", xlab="", ylab="-log10 P-value", xaxt="n", yaxt="n", ...)
+  abline(v=1.5, lwd=3)
+  axis(2, las=2)
+  axis(1, las=2, labels=names(x.pos[-match(c("NULL",highlight.gene), names(x.pos))]), at=x.pos[-match(c("NULL",highlight.gene), names(x.pos))], cex.axis=0.8)
+  axis(1, las=2, labels=highlight.gene, at=x.pos[highlight.gene], cex.axis=0.8, col.axis ="red", font=2)
+  for (test in tests) {
+    idx <- match(test, tests)
+    points(x.pos[-1], -log10(dat2[match(names(x.pos[-1]),dat2$ID), paste0("TWAS.P.val.", test)]), pch=16, col=colours[idx], cex=1.4)
+  }
+}
+
+### Analysis ----
+# Find genes have high PIPs in one method, but are not in the CG set of the other
+PIP.thresh <- 0.75
+ME.specific.genes <- focus_all[focus_all$IN.CRED.SET.ME==T & focus_all$PIP.ME>PIP.thresh & focus_all$IN.CRED.SET.meta==F & focus_all$ID!="NULL",]
+meta.specific.genes <- focus_all[focus_all$IN.CRED.SET.meta==T & focus_all$PIP.meta>PIP.thresh & focus_all$IN.CRED.SET.ME==F & focus_all$ID!="NULL",]
+
+### Figure S19 ----
+# plot EA and AA PIP distributions for each set of genes
+par(mfrow=c(1,2))
+for (test in c("ME","meta")) {
+  dat <- get(paste0(test,".specific.genes"))
+  if (test=="ME") {name="MA-FOCUS"} else if (test=="meta") {name="baseline"}
+  plot(dat$PIP.EA, dat$PIP.AA, xlim=c(0,1), ylim=c(0,1), pch=16, cex=2, col=rgb(0,0,1,0.3), xlab="EA FOCUS PIP", ylab="AA FOCUS PIP", main=name)
+}
+
+### Figure S20 ----
+# make locus zoom plots
+par(mfcol=c(6,2))
+for (i in 1:nrow(ME.specific.genes)) {
+  block <- ME.specific.genes[i,"BLOCK"]
+  pheno <- ME.specific.genes[i,"PHEN"]
+  highlight.genes <- ME.specific.genes[ME.specific.genes$BLOCK==block & ME.specific.genes$PHEN==pheno, "ID"]
+  plot.locus.PIPs(focus_all, block=block, pheno=pheno, tests=c("EA","AA","ME","meta"), highlight.gene=highlight.genes, main=paste0(pheno,", idx=",i," - MA FOCUS"))
+  plot.locus.Pvals(focus_all, block=block, pheno=pheno, tests=c("EA","AA","meta"), highlight.gene=highlight.genes)
+}
+
