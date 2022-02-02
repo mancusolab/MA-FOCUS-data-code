@@ -35,58 +35,33 @@ Specify and run `/simulation/generate_param.R` to make parameter files.
 
 There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenarios:
 
-1. eur_afr: to run general 2-pop MA-FOCUS working with parameter files:
-
+1. eur_afr: to run general 2-pop MA-FOCUS working with parameter and python files:
 	* `/simulation/codes/param/param_eur_afr_3pop.tsv`
-
 	* `/simulation/codes/param/param_eur_afr.tsv`
-
 	* `/simulation/codes/param/param_eur_afr_real.tsv`
-
-  on python files:
-
 	* `/simulation/codes/python/mefocus_run_eur_afr.py`
-
 	* `/simulation/codes/python/mefocus_run_eur_real.py`
 
-2. eur\_afr\_eas: to general run 3-pop MA-FOCUS working with parameter file:
-
+2. eur\_afr\_eas: to general run 3-pop MA-FOCUS working with parameter and python files:
 	* `/simulation/codes/param/param_eur_afr_eas.tsv`
-
-  on python file:
-
   * `/simulation/codes/python/mefocus_run_eur_afr_eas.py`
 
-3. pop2h2ge: to run 2-pop MA-FOCUS when 2nd population has different h2ge working with parameter file:
-
+3. pop2h2ge: to run 2-pop MA-FOCUS when 2nd population has different h2ge working with parameter and python files:
 	* `/simulation/codes/param/param_pop2h2ge.tsv`
-
-	on python file:
-
 	* `/simulation/codes/python/mefocus_run_pop2h2ge.py`
 
-4. pop2weights: to run 2-pop MA-FOCUS when 2nd population eQTL weights are not available and substituted by 1st population eQTL weights working with parameter file:
-
+4. pop2weights: to run 2-pop MA-FOCUS when 2nd population eQTL weights are not available and substituted by 1st population eQTL weights working with parameter and python files:
 	* `/simulation/codes/param/param_pop2weights.tsv`
-
-  on python file:
-
   * `/simulation/codes/python/mefocus_run_pop2weights.py`
 
-5. proxy: to run 2-pop MA-FOCUS when a proxy tissue is used for eQTL weights for 2nd population working with parameter file:
-
+5. proxy: to run 2-pop MA-FOCUS when a proxy tissue is used for eQTL weights for 2nd population working with parameter and python files:
   * `/simulation/codes/param/param_proxy.tsv`
-
-  on python files:
-
 	* `/simulation/codes/python/mefocus_run_proxy.py`
 
 There are three dependent files for the MA-FOCUS simulation python files:
 
 1. `/simulation/codes/python/finemap_1.py`
-
 2. `focus.functions_2pop.py`(For 2-pop MA-FOCUS)
-
 3. `focus.functions_3pop.py`(For 3-pop MA-FOCUS)
 
 ### Data
