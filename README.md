@@ -76,7 +76,7 @@ The R codes that generate figures is in `/simulation/draw.R`, which depends on `
 
 #### Manuscript
 
-The result section 1 and 2 in manuscript contain the statistics computed in `/simulation/sec12analysis.R`. The order of the statistics may not match that in manuscript, but all the numbers should be covered by this script. Sometimes, the P-value is divided by two because we want to test one tail while the R regression results give us two tailed P-value.
+The result section 1 and 2 in manuscript contain the statistics computed in `/simulation/sec1-2.R`. The order of the statistics may not match that in manuscript, but all the numbers should be covered by this script. Sometimes, the P-value is divided by two because we want to test one tail while the R regression results give us two tailed P-value.
 
 
 ## Real-data
