@@ -44,7 +44,7 @@ There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenari
 
 2. eur\_afr\_eas: to general run 3-pop MA-FOCUS working with parameter and python files:
 	* `/simulation/codes/param/param_eur_afr_eas.tsv`
-  * `/simulation/codes/python/mefocus_run_eur_afr_eas.py`
+	* `/simulation/codes/python/mefocus_run_eur_afr_eas.py`
 
 3. pop2h2ge: to run 2-pop MA-FOCUS when 2nd population has different h2ge working with parameter and python files:
 	* `/simulation/codes/param/param_pop2h2ge.tsv`
@@ -52,7 +52,7 @@ There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenari
 
 4. pop2weights: to run 2-pop MA-FOCUS when 2nd population eQTL weights are not available and substituted by 1st population eQTL weights working with parameter and python files:
 	* `/simulation/codes/param/param_pop2weights.tsv`
-  * `/simulation/codes/python/mefocus_run_pop2weights.py`
+	* `/simulation/codes/python/mefocus_run_pop2weights.py`
 
 5. proxy: to run 2-pop MA-FOCUS when a proxy tissue is used for eQTL weights for 2nd population working with parameter and python files:
   * `/simulation/codes/param/param_proxy.tsv`
