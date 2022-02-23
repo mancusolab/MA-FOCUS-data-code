@@ -94,3 +94,17 @@ The R codes that generate figures is in `/real-data/draw.R`, which depends on `/
 The R codes that generate result section 3 and 4 locates in `/real-data/sec3.R` and `/real-data/sec4.R`. All the required data locates in `/real-data/data/`.
 
 The order of the statistics may not match that in manuscript, but all the numbers should be covered by this script. Sometimes, the P-value is divided by two because we want to test one tail while the R regression results give us two tailed P-value.
+
+#### Data
+
+| Analysis Results | Paths |
+| ------------- | ----- |
+| TWAS | `/real-data/data/twas.RData` |
+| MA-FOCUS | `/real-data/data/focus.RData` |
+| Enrichment | `` |
+| Silver | `/real-data/data/silver_result.tsv` |
+| DisGeNET Category | `/real-data/data/DisGeNET_meta_categories.csv` |
+| GENOA Heritability | `/real-data/data/genoa_her_total.tsv` |
+| GEUVADIS Heritability | `/real-data/data//real-data/data/geuvadis_her_total.tsv` |
+| Genetic Variance CV R2 | `/real-data/data/total_r2.tsv` |
+| TWAS&GWAS Correlation | `/real-data/data/twas_gwas_corr.tsv` |
