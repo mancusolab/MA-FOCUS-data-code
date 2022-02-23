@@ -101,7 +101,7 @@ The order of the statistics may not match that in manuscript, but all the number
 | ------------- | ----- |
 | TWAS | `/real-data/data/twas.RData` |
 | MA-FOCUS | `/real-data/data/focus.RData` |
-| Enrichment | `` |
+| Enrichment | `/real-data/data/enrich.RData` |
 | Silver | `/real-data/data/silver_result.tsv` |
 | DisGeNET Category | `/real-data/data/DisGeNET_meta_categories.csv` |
 | GENOA Heritability | `/real-data/data/genoa_her_total.tsv` |
