@@ -49,72 +49,72 @@ theme_corr <- function() {
 
 # shared architecture: correlation between pop
 # plot m4 and s12
-genoadd <- read_tsv("../data/genoa_her_total.tsv")
+genoadd <- read_tsv("./data/genoa_heritability.tsv")
 
 genoadd1 <- genoadd %>%
-  select(GENE, POP, VG) %>%
-  pivot_wider(names_from=POP, values_from = VG)
+  select(GENE, POP, HSQ) %>%
+  pivot_wider(names_from=POP, values_from = HSQ)
 
 p41 <- ggplot(genoadd1, aes(x = ea, y = aa)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_corr() +
-  scale_x_continuous(name = expression(bold("GENOA EA")~bolditalic(cis)~"-"~bolditalic(sigma)^{2}), limits = c(0, 1)) +
-  scale_y_continuous(name = expression(bold("GENOA AA")~bolditalic(cis)~"-"~bolditalic(sigma)^{2}), limits = c(0, 1))
+  scale_x_continuous(name = expression(bold("GENOA EA")~bolditalic(cis)~"-"~bolditalic(h)[g]^{2}), limits = c(0, 1)) +
+  scale_y_continuous(name = expression(bold("GENOA AA")~bolditalic(cis)~"-"~bolditalic(h)[g]^{2}), limits = c(0, 1))
 
 ps121 <- ggplot(filter(genoadd, POP %in% "ea"),
-  aes(x = MODELCV.R2, y = VG)) +
+  aes(x = MODELCV.R2, y = HSQ)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_corr() +
   theme(axis.title.x=element_text(size=x_axis_size,face="bold")) +
   scale_x_continuous(name = expression(bold("GENOA EA CV")~bolditalic(r)^{2}), limits = c(0, 1)) +
-  scale_y_continuous(name = expression(bold("GENOA EA")~bolditalic(cis)~"-"~bolditalic(sigma)^{2}), limits = c(0, 1))
+  scale_y_continuous(name = expression(bold("GENOA EA")~bolditalic(cis)~"-"~bolditalic(h)[g]^{2}), limits = c(0, 1))
 
 ps122 <- ggplot(filter(genoadd, POP %in% "aa"),
-  aes(x = MODELCV.R2, y = VG)) +
+  aes(x = MODELCV.R2, y = HSQ)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_corr() +
   theme(axis.title.x=element_text(size=x_axis_size,face="bold")) +
   # stat_cor(method = "pearson", label.x = 0.01, label.y = 0.9) +
   scale_x_continuous(name = expression(bold("GENOA AA CV")~bolditalic(r)^{2}), limits = c(0, 1)) +
-  scale_y_continuous(name = expression(bold("GENOA AA")~bolditalic(cis)~"-"~bolditalic(sigma)^{2}), limits = c(0, 1))
+  scale_y_continuous(name = expression(bold("GENOA AA")~bolditalic(cis)~"-"~bolditalic(h)[g]^{2}), limits = c(0, 1))
 
-geuvadisdd <- read_tsv("../data/geuvadis_her_total.tsv")
+geuvadisdd <- read_tsv("./data/geuvadis_heritability.tsv")
 
-p43 <- ggplot(filter(geuvadisdd, POP %in% "EUR"), aes(x = VG, y = r2)) +
+p43 <- ggplot(filter(geuvadisdd, POP %in% "EUR"), aes(x = HSQ, y = r2)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_corr() +
   theme(axis.title.x=element_text(size=x_axis_size,face="bold")) +
   ylab(expression(bold("Prediction")~bolditalic(r)^{2})) +
-  xlab(expression(bold("GEUVADIS EUR")~bolditalic(cis)~"-"~bolditalic(sigma)^{2})) +
+  xlab(expression(bold("GEUVADIS EUR")~bolditalic(cis)~"-"~bolditalic(h)[g]^{2})) +
   ylim(0, 1)
 
-p44 <- ggplot(filter(geuvadisdd, POP %in% "YRI"), aes(x = VG, y = r2)) +
+p44 <- ggplot(filter(geuvadisdd, POP %in% "YRI"), aes(x = HSQ, y = r2)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_corr() +
   theme(axis.title.x=element_text(size=x_axis_size,face="bold")) +
   ylab(expression(bold("Prediction")~bolditalic(r)^{2})) +
-  xlab(expression(bold("GEUVADIS YRI")~bolditalic(cis)~"-"~bolditalic(sigma)^{2})) +
+  xlab(expression(bold("GEUVADIS YRI")~bolditalic(cis)~"-"~bolditalic(h)[g]^{2})) +
   ylim(0, 1)
 
 p4 <- ggarrange(p41, p43, p44,
   labels = c("A", "B", "C"), 
   font.label = list(size = arrange_label_size, family = ffont), nrow = 1)
 
-ggsave("figure-m4.pdf", plot = p4, path = "../plot/", height = one_row_height, width = two_col,
+ggsave("figure-m4.pdf", plot = p4, path = "./plot/", height = one_row_height, width = two_col,
   dpi = 300)
 
 ps12 <- ggarrange(ps121, ps122,
   labels = c("A", "B"), nrow = 2)
-ggsave("figure-s12.png", plot = ps12, path = "../plot/", height = two_row_height, width = onehalf_col)
+ggsave("figure-s12.png", plot = ps12, path = "./plot/", height = two_row_height, width = onehalf_col)
 
 
 # comparison r2
-tot <- read_tsv("../data/total_r2.tsv")
+tot <- read_tsv("./data/total_r2.tsv")
 
 tmptot <- tot %>%
   pivot_longer(-gene) %>%
