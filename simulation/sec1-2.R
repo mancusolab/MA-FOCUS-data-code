@@ -3,7 +3,6 @@ library(broom)
 PIP.threshold <- 0.9
 
 load("data/eur_afr.RDat")
-
 # Across all simulation scenarios where causal eQTLs were independent across populations,
 # we found MA-FOCUS reported higher PIPs for causal genes than the baseline approach
 # (0.62 compared with 0.45; P<110-15)
@@ -17,6 +16,7 @@ tmp <- dd %>%
   filter(true_model %in% 1) %>%
   pivot_longer(cols = c(ME.pip, meta.pip))
 tidy(lm(value ~ name + n1 + nge1  + h2g + h2ge, tmp))
+1.81e-39/2
 
 # smaller credible sets (4.89 compared to 6.62; P<110-15),
 tmp <- dd %>%
@@ -39,6 +39,7 @@ mean(filter(tmp, name == "ME.pipGS")$`GS.size`)
 mean(filter(tmp, name == "meta.pipGS")$`GS.size`)
 
 tidy(lm(GS.size ~ name + n1 + nge1 + h2g + h2ge, tmp))
+4.26/2
 
 # higher sensitivity (88.31% compared to 81.31%)
 dd %>%
@@ -76,7 +77,7 @@ tmp <- dd %>%
       distinct(),
     by = c("sim", "locus")) 
 tidy(glm(true_model ~ name + n1 + nge1 + h2ge +h2g, tmp, family = binomial("logit")))
-
+1.87/2
 
 # from 200 to 400, improved sensitivity by 6% from 91% to 97%
 dd %>%
@@ -317,6 +318,7 @@ tmp %>%
 tmp %>%
   group_by(name) %>%
   summarize(n = mean(value))
+1.22e-2/2
 
 tmp <- dd1 %>%
   filter(n1 == 50000) %>%
@@ -606,7 +608,7 @@ tmp <- dd1 %>%
 
 tidy(lm(value ~ name + h2ge2, tmp))
 
-load("./data/eur_afr_real2.RDat")
+load("./data/eur_afr_real.RDat")
 dd1 <- dd %>%
   filter(h2ge %in% c(0, 0.00001713863, 0.0001139271, 0.0007573169, 0.005034176)) %>%
   filter(eqtl.model == "indep")
@@ -650,7 +652,7 @@ mean(filter(tmp, name == "ME.pip")$true_model)
 mean(filter(tmp, name == "meta.pip")$true_model)
 
 tidy(glm(true_model ~ name + h2ge, tmp, family = binomial("logit")))
-
+3.48e-1/2
 
 # We again observed that MA-FOCUS outperformed the baseline approach as well as
 # single-pop FOCUS on AFR across all metrics
@@ -733,7 +735,7 @@ tmp <- dd6 %>%
   summarize(true_model = sum(true_model))
 
 tidy(lm(true_model ~ name + rho,tmp))
-
+1.71e-1/2
 
 load("./data/eur_afr.RDat")
 tmpdd7 <- dd %>%
@@ -752,6 +754,7 @@ tmp <- dd7 %>%
   pivot_longer(cols=c(ME.pip, meta.pip, pop2.pip))
 
 tidy(lm(value ~ name, tmp))
+6.47e-1/2
 
 tmp <- dd7 %>%
   pivot_longer(c(ME.pip, meta.pip)) %>%
@@ -769,6 +772,7 @@ tmp <- dd7 %>%
   filter(pop == "EUR")
 
 tidy(lm(value ~ name, tmp))
+7.45e-9/2
 
 tmp <- dd7 %>%
   pivot_longer(c(ME.pip, pop2.pip)) %>%
@@ -782,4 +786,4 @@ tmp <- dd7 %>%
   summarize(true_model = sum(true_model))
 
 tidy(glm(true_model ~ name, tmp, family=binomial("logit")))
-
+7.14e-1/2

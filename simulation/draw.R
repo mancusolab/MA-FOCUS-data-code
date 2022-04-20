@@ -11,6 +11,7 @@ library(scales)
 library(gtable)
 library(grid)
 library(svglite)
+library(ggtext)
 source("./figure_style.R")
 PIP.threshold <- 0.9
 scaleFUN <- function(x) sprintf("%.2f", x)
@@ -28,8 +29,8 @@ mean_size <- 2
 mean_shape <- 22
 median_size <- 2
 median_shape <- 22
-x_axis_size <- 10
-y_axis_size <- 10
+x_axis_size <- 8
+y_axis_size <- 8
 
 point_size <- 3
 point_shape <- 21
@@ -39,7 +40,7 @@ ylabel_PIP <- "Causal gene PIP"
 ylabel_num <- "Credible set size"
 ylabel_freq <- "Freq. of causal\nin credible set"
 
-arrange_label_size <- 12
+arrange_label_size <- 8
 one_row_height <- 2.5
 two_row_height <- 4.5
 three_row_height <- 6.5
@@ -48,14 +49,17 @@ one_col <- 3.35
 onehalf_col <- 4.49
 two_col <- 6.85
 
+ffont <- "sans"
+fontsize <- 8
 theme_sim <- function() {
     theme(panel.grid.major.x = element_blank(),
         strip.background = element_blank(),
-        panel.grid.major.y = element_line(size = 0.2, color = "grey70"),
+        panel.grid.major.y = element_line(size = 0.5, color = "grey70"),
         panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA),
         legend.title = element_blank(),
-        axis.title=element_text(size = x_axis_size,face="bold"))
+        axis.title=element_text(face="bold"),
+        text=element_text(size = fontsize,  family = ffont))
 }
 
 addMeanMedian <- function(p) {
@@ -93,9 +97,9 @@ ddPIPN2 <- dd1 %>%
             ifelse(X %in% c(5, 6), X + 1, X)))
 
 pipN2 <- ggplot(ddPIPN2, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
-    geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
+    geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.5) +
     theme_sim() +
     scale_x_continuous(name = "GWAS sample size", breaks= c(1.5, 4, 6.5),
         labels = c("50000", "100000", "200000")) +
@@ -128,7 +132,7 @@ ddGSN2 <- dd1 %>%
 colnames(ddGSN2) <- c("n1", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsN2 <- ggplot(ddGSN2, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8) +
     theme_sim() +
     scale_x_continuous(name = "GWAS sample size", breaks= c(1.5, 4, 6.5),
@@ -162,10 +166,10 @@ ddFTN2 <- dd1 %>%
 colnames(ddFTN2) <- c("n1", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftN2 <- ggplot(ddFTN2, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_point(size = point_size, shape = point_shape) +
-    geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
+    geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.5) +
     theme_sim() +
     scale_x_continuous(name = "GWAS sample size", breaks= c(1.5, 3.5, 5.5),
         labels = c("50000", "100000", "200000")) +
@@ -173,10 +177,11 @@ ftN2 <- ggplot(ddFTN2, aes(x = X, y = value, fill = test, group = Label)) +
         limits = c(0.6, 1), labels=scaleFUN)
 
 p2 <- ggarrange(pipN2, gsN2, ftN2, nrow = 1, labels = c("A", "B", "C"),
-    font.label = list(size = arrange_label_size),
+    font.label = list(size = arrange_label_size, family = ffont),
     common.legend = TRUE, legend = "bottom")
 
-ggsave("figure-m2.png", plot = p2, path = "./plot/", height = one_row_height, width = two_col)
+# ggsave("figure-m2.pdf", plot = p2, path = "./plot/", height = one_row_height, width = two_col,
+#     dpi = 300)
 
 
 # Plot s2
@@ -195,7 +200,7 @@ ddPIPNGES2 <- dd2 %>%
                     ifelse(X %in% c(9, 10), X + 2, X)))))
 
 pipNGES2 <- ggplot(ddPIPNGES2, aes(x=X, y=value, fill=PIP, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_violin(scale="width", alpha=0.8, position=position_dodge(width=0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     theme_sim() +
@@ -234,7 +239,7 @@ ddGSNGES2 <- dd2 %>%
 colnames(ddGSNGES2) <- c("nge1", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsNGES2 <- ggplot(ddGSNGES2, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_violin(scale="width", alpha=0.8) +
     theme_sim() +
     scale_x_continuous(name = "eQTL sample size",
@@ -270,7 +275,7 @@ ddFTNGES2 <- dd2 %>%
 colnames(ddFTNGES2) <- c("nge1", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftNGES2 <- ggplot(ddFTNGES2, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -284,7 +289,7 @@ ftNGES2 <- ggplot(ddFTNGES2, aes(x=X, y=value, fill=test, group=Label)) +
 ps2 <- ggarrange(pipNGES2, gsNGES2, ftNGES2, nrow = 1, labels = c("A", "B", "C"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
-ggsave("figure-s2.png", plot = ps2, path = "./plot/", height = one_row_height, width = two_col)
+# ggsave("figure-s2.png", plot = ps2, path = "./plot/", height = one_row_height, width = two_col)
 
 # Plot s3
 ddPIPNS3 <- dd1 %>%
@@ -299,7 +304,7 @@ ddPIPNS3 <- dd1 %>%
             ifelse(X %in% c(5, 6), X + 1, X)))
 
 pipNS3 <- ggplot(ddPIPNS3, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     theme_sim() +
@@ -334,7 +339,7 @@ ddGSNS3 <- dd1 %>%
 colnames(ddGSNS3) <- c("n1", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsNS3 <- ggplot(ddGSNS3, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8) +
     theme_sim() +
     new_scale_fill() +
@@ -369,7 +374,7 @@ ddFTNS3 <- dd1 %>%
 colnames(ddFTNS3) <- c("n1", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftNS3 <- ggplot(ddFTNS3, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -394,7 +399,7 @@ ddPIPNGES3 <- dd2 %>%
                     ifelse(X %in% c(9, 10), X + 2, X)))))
 
 pipNGES3 <- ggplot(ddPIPNGES3, aes(x=X, y=value, fill=PIP, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_violin(scale="width", alpha=0.8, position=position_dodge(width=0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     theme_sim() +
@@ -433,7 +438,7 @@ ddGSNGES3 <- dd2 %>%
 colnames(ddGSNGES3) <- c("nge1", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsNGES3 <- ggplot(ddGSNGES3, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_violin(scale="width", alpha=0.8) +
     theme_sim() +
     scale_x_continuous(name = "eQTL sample size",
@@ -469,7 +474,7 @@ ddFTNGES3 <- dd2 %>%
 colnames(ddFTNGES3) <- c("nge1", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftNGES3 <- ggplot(ddFTNGES3, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -484,7 +489,7 @@ ps3 <- ggarrange(pipNS3, gsNS3, ftNS3, pipNGES3, gsNGES3, ftNGES3,
     labels = c("A", "B", "C", "D", "E","F"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
-ggsave("figure-s3.png", plot = ps3, path = "./plot/", height = two_row_height, width = two_col)
+# ggsave("figure-s3.png", plot = ps3, path = "./plot/", height = two_row_height, width = two_col)
 
 dd3 <- dd %>%
     filter(n1 == 100000 & nge1 == 200 & eqtl.model == "indep" & h2g == 0.05)
@@ -506,7 +511,7 @@ ddPIPH2GE <- dd3 %>%
                     ifelse(X %in% c(9, 10), X + 6, X)))))
 
 pipH2GE <- ggplot(ddPIPH2GE, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept = PIP.threshold, linetype="dashed", size = 0.25) +
     geom_vline(xintercept = 3.25, linetype = "dotted", size = 0.25) +
@@ -548,7 +553,7 @@ ddGSH2GE <- dd3 %>%
 colnames(ddGSH2GE) <- c("h2ge", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsH2GE <- ggplot(ddGSH2GE, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS4, labels=LABELS4) +
     geom_violin(scale="width", alpha=0.8) +
     geom_vline(xintercept = 3.25, linetype="dotted", size = 0.25) +
     theme_sim() +
@@ -591,7 +596,7 @@ ddFTH2GE <- dd3 %>%
 colnames(ddFTH2GE) <- c("h2g", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftH2GE <- ggplot(ddFTH2GE, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_vline(xintercept = 3.25, linetype="dotted", size = 0.25) +
@@ -608,7 +613,7 @@ ps5 <- ggarrange(pipH2GE, gsH2GE, ftH2GE, nrow = 3, labels = c("A", "B", "C"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
 
-ggsave("figure-s5.png", plot = ps5, path = "./plot/", height = three_row_height, width = onehalf_col)
+# ggsave("figure-s5.png", plot = ps5, path = "./plot/", height = three_row_height, width = onehalf_col)
 
 # plot s4
 dd4 <- dd %>%
@@ -626,7 +631,7 @@ ddPIPH2G <- dd4 %>%
             ifelse(X %in% c(5, 6), X + 1, X)))
 
 pipH2G <- ggplot(ddPIPH2G, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     theme_sim() +
@@ -661,7 +666,7 @@ ddGSH2G <- dd4 %>%
 colnames(ddGSH2G) <- c("h2g", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsH2G <- ggplot(ddGSH2G, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_violin(scale = "width", alpha = 0.8) +
     theme_sim() +
     scale_x_continuous(name = expression(bolditalic(cis)~"-"~bolditalic(h)[g]^{2}),
@@ -696,7 +701,7 @@ ddFTH2G <- dd4 %>%
 colnames(ddFTH2G) <- c("h2g", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftH2G <- ggplot(ddFTH2G, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS4, labels = LABELS4) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -710,7 +715,7 @@ ftH2G <- ggplot(ddFTH2G, aes(x = X, y = value, fill = test, group = Label)) +
 ps4 <- ggarrange(pipH2G, gsH2G, ftH2G, nrow = 1,labels = c("A", "B", "C"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
-ggsave("figure-s4.png", plot = ps4, path = "./plot/", height = one_row_height, width = two_col)
+# ggsave("figure-s4.png", plot = ps4, path = "./plot/", height = one_row_height, width = two_col)
 
 # Figure S6
 dd1 <- dd %>%
@@ -751,7 +756,7 @@ ddPIPCP <- tmp %>%
         X = ifelse(X %in% c(3, 4), X + 0.5, X))
 
 pipCP <- ggplot(ddPIPCP, aes(x = X, y = value, fill = name, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS5, labels = LABELS5) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     theme_sim() +
@@ -828,7 +833,7 @@ ddGSCP <- tmp %>%
         X = ifelse(X %in% c(3, 4), X + 0.5, X))
 
 gsCP <- ggplot(ddGSCP, aes(x = X, y = value, fill = name, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS5, labels = LABELS5) +
     geom_violin(scale = "width", alpha = 0.8) +
     theme_sim() +
     scale_x_continuous(name= "Total GWAS sample size",
@@ -910,7 +915,7 @@ ddFTCP <- tmp %>%
     mutate(se = sqrt(value*(1-value)/100))
 
 ftCP <- ggplot(ddFTCP, aes(x = X, y = value, fill = name, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS5, labels = LABELS5) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size = 0.25) +
@@ -925,7 +930,7 @@ ps6 <- ggarrange(pipCP, gsCP, ftCP, nrow = 1,labels = c("A", "B", "C"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
 
-ggsave("figure-s6.png", plot = ps6, path = "./plot/", height = one_row_height, width = two_col)
+# ggsave("figure-s6.png", plot = ps6, path = "./plot/", height = one_row_height, width = two_col)
 
 # plot s7
 load("./data/eur_afr_3pop.RDat")
@@ -957,7 +962,7 @@ ddPIP3POPN1 <- dd4 %>%
             ifelse(X %in% c(5, 6), X + 1, X)))
 
 pip3POPN1 <- ggplot(ddPIP3POPN1, aes(x = X, y = value, fill = pop, group = Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS6, labels=LABELS6) +
     geom_violin(scale="width", alpha=0.8, position=position_dodge(width=0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     theme_sim() +
@@ -992,7 +997,7 @@ ddGS3POPN1 <- dd4 %>%
 colnames(ddGS3POPN1) <- c("totalGS", "test","locus", "value", "contains_true_model", "eqtl.model","pop", "Label", "X")
 
 gs3POPN1 <- ggplot(ddGS3POPN1, aes(x=X, y=value, fill=pop, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS6, labels=LABELS6) +
     geom_violin(scale="width", alpha=0.8) +
     theme_sim() +
     scale_x_continuous(name = "Total GWAS sample size",
@@ -1028,7 +1033,7 @@ ddFT3POPN1 <- dd4 %>%
 colnames(ddFT3POPN1) <- c("totalGS", "pop", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ft3POPN1 <- ggplot(ddFT3POPN1, aes(x = X, y = value, fill = pop, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS6, labels = LABELS6) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -1043,7 +1048,7 @@ ps7 <- ggarrange(pip3POPN1, gs3POPN1, ft3POPN1, nrow = 1,labels = c("A", "B", "C
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
 
-ggsave("figure-s7.png", plot = ps7, path = "./plot/", height = one_row_height, width = two_col)
+# ggsave("figure-s7.png", plot = ps7, path = "./plot/", height = one_row_height, width = two_col)
 
 
 #Plot S8
@@ -1072,7 +1077,7 @@ ddPIPREAL2 <- tmp %>%
         PIP = factor(PIP, levels = c("pop1.pip", "pop2.pip", "ME.pip", "meta.pip")))
 
 pipREAL2 <- ggplot(ddPIPREAL2, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS2, labels = LABELS2) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
     geom_vline(xintercept = 5.25, linetype="dotted", size = 0.25) +
@@ -1117,7 +1122,7 @@ colnames(ddGSREAL2) <- c("h2ge", "test", "locus", "value", "contains_true_model"
     "Label", "X")
 
 gsREAL2 <- ggplot(ddGSREAL2, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS2, labels=LABELS2) +
     geom_violin(scale="width", alpha=0.8) +
     geom_vline(xintercept = 5.25, linetype="dotted", size = 0.25) +
     theme_sim() +
@@ -1162,7 +1167,7 @@ ddFTREAL2 <- tmp %>%
 colnames(ddFTREAL2) <- c("h2ge", "name", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftREAL2 <- ggplot(ddFTREAL2, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS2, labels = LABELS2) +
     geom_vline(xintercept = 5.25, linetype="dotted", size = 0.25) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
@@ -1178,7 +1183,8 @@ ftREAL2 <- ggplot(ddFTREAL2, aes(x = X, y = value, fill = test, group = Label)) 
 ps8 <- ggarrange(pipREAL2, gsREAL2, ftREAL2, nrow = 3, labels = c("A", "B", "C"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
-ggsave("figure-s8.png", plot = ps8, path = "./plot/", height = three_row_height, width = two_col)
+
+# ggsave("figure-s8.png", plot = ps8, path = "./plot/", height = three_row_height, width = two_col)
 
 # figure 3
 load("./data/pop2h2ge.RDat")
@@ -1187,42 +1193,6 @@ dd5 <- dd %>%
             eqtl.model %in% "indep")
 
 H2GE <- c(0.00001713863, 0.0001139271, 0.0007573169, 0.005034176)
-# ddPIPH2GE2 <- dd5 %>%
-#     filter(true_model %in% 1) %>%
-#     pivot_longer(cols = c(pop2.pip, ME.pip, meta.pip), "PIP") %>%
-#     select(sim, h2ge2, PIP, value, eqtl.model) %>%
-#     bind_rows(dd5 %>%
-#             filter(true_model %in% 1) %>%
-#             pivot_longer(cols = c(pop1.pip), "PIP") %>%
-#             filter(h2ge2 == 0.0007573169) %>%
-#             select(sim, h2ge2, PIP, value, eqtl.model)) %>%
-#     mutate(Label = factor(paste(h2ge2, PIP, sep = "_"),
-#         levels = c("0.0007573169_pop1.pip", "1.713863e-05_pop2.pip", "1.713863e-05_ME.pip",
-#             "1.713863e-05_meta.pip", "0.0001139271_pop2.pip", "0.0001139271_ME.pip", "0.0001139271_meta.pip",
-#             "0.0007573169_pop2.pip", "0.0007573169_ME.pip", "0.0007573169_meta.pip", "0.005034176_pop2.pip",
-#             "0.005034176_ME.pip", "0.005034176_meta.pip")),
-#         X = as.numeric(Label),
-#         X = ifelse(X %in% c(2, 3, 4), X + 1.5,
-#             ifelse(X %in% c(5, 6, 7), X + 3,
-#                 ifelse(X %in% c(8, 9, 10), X + 4.5, 
-#                     ifelse(X %in% c(11, 12, 13), X + 6, X)))),
-#         PIP = factor(PIP, levels = c("pop1.pip", "pop2.pip", "ME.pip", "meta.pip")))
-# 
-# pipH2GE2 <- ggplot(ddPIPH2GE2, aes(x = X, y = value, fill = PIP, group = Label)) +
-#     scale_fill_manual(values = COLS2, labels = LABELS2) +
-#     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
-#     geom_hline(yintercept = PIP.threshold, linetype="dashed", size = 0.25) +
-#     theme_sim() +
-#     scale_x_continuous(name = expression(bold("Variation in trait explained by causal gene expression (")
-#         ~bolditalic(h)[GE]^{2}~bold(") for AFR")),
-#         breaks= c(1, 4.5, 9, 13.5, 18),
-#         labels = c(expression(7.57%*%10^-4~"(EUR)"), scientific(H2GE))) +
-#     scale_y_continuous(name = ylabel_PIP)
-# pipH2GE2 <- addMeanMedian(pipH2GE2)
-# 
-# p3 <- pipH2GE2
-# ggsave("figure-m3.png", plot = p3, path = "./plot/", height = one_row_height, width = two_col)
-
 
 tmpddPIPH2GE2 <- dd5 %>%
     filter(true_model %in% 1) %>%
@@ -1254,7 +1224,7 @@ ddPIPH2GE2 <- tmpddPIPH2GE2 %>%
 pipH2GE2 <- ggplot(ddPIPH2GE2, aes(x = X, y = value, fill = PIP, group = Label)) +
     scale_fill_manual(values = COLS3, labels = LABELS3) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
-    geom_hline(yintercept = PIP.threshold, linetype="dashed", size = 0.25) +
+    geom_hline(yintercept = PIP.threshold, linetype="dashed", size = 0.5) +
     geom_hline(yintercept = eurddMean, linetype="dotted", size = 1, color = "#F6795E") +
     geom_hline(yintercept = eurddMedian, linetype="dotted", size = 1, color = "#CE15EF") +
     theme_sim() +
@@ -1266,7 +1236,8 @@ pipH2GE2 <- ggplot(ddPIPH2GE2, aes(x = X, y = value, fill = PIP, group = Label))
 pipH2GE2 <- addMeanMedian(pipH2GE2)
 
 p3 <- pipH2GE2
-ggsave("figure-m3.png", plot = p3, path = "./plot/", height = one_row_height, width = two_col)
+# ggsave("figure-m3.pdf", plot = p3, path = "./plot/", height = one_row_height, width = two_col,
+#     dpi = 300)
 
 
 # figure s9
@@ -1374,7 +1345,8 @@ ftH2GE2 <- ggplot(ddFTH2GE2, aes(x = X, y = value, fill = test, group = Label)) 
 
 ps9 <- ggarrange(gsH2GE2, ftH2GE2, nrow = 2, labels = c("A", "B"),
     common.legend = TRUE, legend = "bottom")
-ggsave("figure-s9.png", plot = ps9, path = "./plot/", height = two_row_height, width = two_col)
+
+# ggsave("figure-s9.png", plot = ps9, path = "./plot/", height = two_row_height, width = two_col)
 
 # plot s10
 # proxy
@@ -1405,7 +1377,7 @@ ddPIPProxy <- dd6 %>%
         PIP = factor(PIP, levels = c("pop2.pip", "ME.pip", "meta.pip")))
 
 pipProxy <- ggplot(ddPIPProxy, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS3, labels = LABELS3) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept = PIP.threshold, linetype="dashed", size = 0.25) +
     geom_vline(xintercept = 4.25, linetype="dotted", size = 0.25) +
@@ -1445,7 +1417,7 @@ ddGSProxy <- dd6 %>%
 colnames(ddGSProxy) <- c("rho", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsProxy <- ggplot(ddGSProxy, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS3, labels=LABELS3) +
     geom_violin(scale="width", alpha=0.8) +
     theme_sim() +
     scale_x_continuous(name = "Correlation between causal and proxy tissue used for AFR",
@@ -1485,7 +1457,7 @@ ddFTProxy <- dd6 %>%
 colnames(ddFTProxy) <- c("rho", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftProxy <- ggplot(ddFTProxy, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS3, labels = LABELS3) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = errbar_width) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -1500,7 +1472,8 @@ ps10 <- ggarrange(pipProxy, gsProxy, ftProxy, nrow = 3,
     labels = c("A", "B", "C"),
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
-ggsave("figure-s10.png", plot = ps10, path = "./plot/", height = three_row_height, width = two_col)
+
+# ggsave("figure-s10.png", plot = ps10, path = "./plot/", height = three_row_height, width = two_col)
 
 # s11
 load("./data/eur_afr.RDat")
@@ -1526,7 +1499,7 @@ ddPIPPOP2W <- dd7 %>%
         PIP = factor(PIP, levels = c("pop2.pip", "ME.pip", "meta.pip")))
 
 pipPOP2W <- ggplot(ddPIPPOP2W, aes(x = X, y = value, fill = PIP, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS3, labels = LABELS3) +
     geom_violin(scale = "width", alpha = 0.8, position=position_dodge(width = 0.3)) +
     geom_hline(yintercept = PIP.threshold, linetype="dashed", size = 0.25) +
     theme_sim() +
@@ -1561,7 +1534,7 @@ ddGSPOP2W<- dd7 %>%
 colnames(ddGSPOP2W) <- c("pop", "test","locus", "value", "contains_true_model", "eqtl.model", "Label", "X")
 
 gsPOP2W <- ggplot(ddGSPOP2W, aes(x=X, y=value, fill=test, group=Label)) +
-    scale_fill_manual(values=COLS, labels=LABELS) +
+    scale_fill_manual(values=COLS3, labels=LABELS3) +
     geom_violin(scale="width", alpha=0.8) +
     theme_sim() +
     scale_x_continuous(name = "eQTL wgt. used for AFR",
@@ -1597,7 +1570,7 @@ ddFTPOP2W <- dd7 %>%
 colnames(ddFTPOP2W) <- c("pop", "test", "eqtl.model", "value", "Label", "X", "se")
 
 ftPOP2W <- ggplot(ddFTPOP2W, aes(x = X, y = value, fill = test, group = Label)) +
-    scale_fill_manual(values = COLS, labels = LABELS) +
+    scale_fill_manual(values = COLS3, labels = LABELS3) +
     geom_point(size = point_size, shape = point_shape) +
     geom_errorbar(aes(ymin = value - se, ymax = value + se), width = 0.2) +
     geom_hline(yintercept=PIP.threshold, linetype="dashed", size=0.25) +
@@ -1612,6 +1585,4 @@ ps11 <- ggarrange(pipPOP2W, gsPOP2W, ftPOP2W, nrow = 1, labels = c("A", "B", "C"
     font.label = list(size = arrange_label_size),
     common.legend = TRUE, legend = "bottom")
 
-ggsave("figure-s11.png", plot = ps11, path = "./plot/", height = one_row_height, width = two_col)
-
-
+# ggsave("figure-s11.png", plot = ps11, path = "./plot/", height = one_row_height, width = two_col)
