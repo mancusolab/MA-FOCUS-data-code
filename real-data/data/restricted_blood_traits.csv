@@ -1,0 +1,160 @@
+HPO,phecode,EFO,efo_trait,hpo_trait,phecode_trait
+HP:0003645,286.9,NA,NA,NA,Abnormal coagulation profile
+HP:0005542,286.9,NA,NA,NA,Abnormal coagulation profile
+HP:0008151,286.9,NA,NA,NA,Abnormal coagulation profile
+HP:0012201,286.9,NA,NA,NA,Abnormal coagulation profile
+HP:0003010,286.9,NA,NA,Prolonged bleeding time,Abnormal coagulation profile
+HP:0001898,289.9,NA,NA,Increased red blood cell mass,Abnormality of red blood cells
+HP:0001899,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0011273,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0004447,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0001981,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0012119,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0004839,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0001877,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0004823,289.9,NA,NA,NA,Abnormality of red blood cells
+HP:0001878,283,NA,NA,NA,Acquired hemolytic anemias
+HP:0004802,283,NA,NA,NA,Acquired hemolytic anemias
+HP:0004814,283,NA,NA,NA,Acquired hemolytic anemias
+HP:0004844,283,NA,NA,NA,Acquired hemolytic anemias
+HP:0004863,283,NA,NA,NA,Acquired hemolytic anemias
+HP:0001915,284,NA,NA,Aplastic anemia,Aplastic anemia
+HP:0005528,284,NA,NA,NA,Aplastic anemia
+HP:0010972,284,NA,NA,NA,Aplastic anemia
+HP:0001928,286,EFO:0004634,coagulation factor measurement,Abnormality of coagulation,Coagulation defects
+HP:0003256,286,EFO:0004634,coagulation factor measurement,NA,Coagulation defects
+HP:0008330,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0012147,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0004841,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0008357,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0001929,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0011858,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0003225,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0008169,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0008321,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0003570,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0008354,286.1,NA,NA,NA,Congenital coagulation defects
+HP:0005365,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0010976,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0001888,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0001882,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0005407,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0005403,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0005415,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0012312,288.1,NA,NA,NA,Decreased white blood cell count
+HP:0001972,281.9,NA,NA,NA,Deficiency anemias
+HP:0005532,281.9,NA,NA,NA,Deficiency anemias
+HP:0012223,289.5,NA,NA,NA,Diseases of spleen
+HP:0001978,289.5,NA,NA,NA,Diseases of spleen
+HP:0001971,289.5,NA,NA,NA,Diseases of spleen
+HP:0030423,289.5,NA,NA,NA,Diseases of spleen
+HP:0012311,288,NA,NA,NA,Diseases of white blood cells
+HP:0001879,288,NA,NA,NA,Diseases of white blood cells
+HP:0100827,288,NA,NA,NA,Diseases of white blood cells
+HP:0005404,288,NA,NA,NA,Diseases of white blood cells
+HP:0002904,277.4,EFO:0004570,bilirubin measurement,Hyperbilirubinemia,Disorders of bilirubin excretion
+HP:0008282,277.4,EFO:0004570,bilirubin measurement,NA,Disorders of bilirubin excretion
+HP:0003573,277.4,EFO:0004570,bilirubin measurement,NA,Disorders of bilirubin excretion
+HP:0002908,277.4,EFO:0004570,bilirubin measurement,NA,Disorders of bilirubin excretion
+HP:0003265,277.4,EFO:0004570,bilirubin measurement,NA,Disorders of bilirubin excretion
+HP:0001974,288.2,EFO:0004308,leukocyte count,Leukocytosis,Elevated white blood cell count
+HP:0001974,288.2,EFO:0004587,lymphocyte count,Leukocytosis,Elevated white blood cell count
+HP:0001974,288.2,EFO:0005091,monocyte count,Leukocytosis,Elevated white blood cell count
+HP:0011897,288.2,EFO:0004308,leukocyte count,NA,Elevated white blood cell count
+HP:0011897,288.2,EFO:0004587,lymphocyte count,NA,Elevated white blood cell count
+HP:0011897,288.2,EFO:0005091,monocyte count,NA,Elevated white blood cell count
+HP:0001880,288.3,NA,NA,Eosinophilia,Eosinophilia
+HP:0004804,656.5,NA,NA,Congenital hemolytic anemia,Hematological disorders of newborn
+HP:0004810,656.5,NA,NA,NA,Hematological disorders of newborn
+HP:0001905,656.5,NA,NA,NA,Hematological disorders of newborn
+HP:0001930,282,NA,NA,NA,Hereditary hemolytic anemias
+HP:0100724,286.8,NA,NA,NA,Hypercoagulable state
+HP:0001944,276.5,NA,NA,NA,Hypovolemia
+HP:0001891,280,NA,NA,Iron deficiency anemia,Iron deficiency anemias
+HP:0040303,280,NA,NA,NA,Iron deficiency anemias
+HP:0004840,280.1,EFO:0004461,iron biomarker measurement,Hypochromic microcytic anemia,"Iron deficiency anemias, unspecified or not due to blood loss"
+HP:0001931,280.1,EFO:0004461,iron biomarker measurement,NA,"Iron deficiency anemias, unspecified or not due to blood loss"
+HP:0001935,280.1,EFO:0004461,iron biomarker measurement,NA,"Iron deficiency anemias, unspecified or not due to blood loss"
+HP:0004856,280.1,EFO:0004461,iron biomarker measurement,NA,"Iron deficiency anemias, unspecified or not due to blood loss"
+HP:0000858,626.1,NA,NA,NA,Irregular menstrual cycle/bleeding
+HP:0001909,204,NA,NA,NA,Leukemia
+HP:0002488,204,NA,NA,NA,Leukemia
+HP:0005517,204,NA,NA,NA,Leukemia
+HP:0006733,204,NA,NA,NA,Leukemia
+HP:0002840,289.4,NA,NA,Lymphadenitis,Lymphadenitis
+HP:0002716,289.4,NA,NA,Lymphadenopathy,Lymphadenitis
+HP:0008940,289.4,NA,NA,NA,Lymphadenitis
+HP:0002729,289.4,NA,NA,NA,Lymphadenitis
+HP:0002730,289.4,NA,NA,NA,Lymphadenitis
+HP:0025289,289.4,NA,NA,NA,Lymphadenitis
+HP:0006721,204.11,EFO:0000220,acute lymphoblastic leukemia,NA,"Lymphoid leukemia, acute"
+HP:0006727,204.11,EFO:0000220,acute lymphoblastic leukemia,NA,"Lymphoid leukemia, acute"
+HP:0004848,204.11,EFO:0000220,acute lymphoblastic leukemia,NA,"Lymphoid leukemia, acute"
+HP:0006721,204.11,EFO:0000094,B-cell acute lymphoblastic leukemia,NA,"Lymphoid leukemia, acute"
+HP:0006727,204.11,EFO:0000094,B-cell acute lymphoblastic leukemia,NA,"Lymphoid leukemia, acute"
+HP:0004848,204.11,EFO:0000094,B-cell acute lymphoblastic leukemia,NA,"Lymphoid leukemia, acute"
+HP:0005550,204.12,EFO:0000095,chronic lymphocytic leukemia,NA,"Lymphoid leukemia, chronic"
+HP:0001889,281.1,EFO:0004620,vitamin B12 measurement,NA,Megaloblastic anemia
+HP:0004851,281.1,EFO:0004620,vitamin B12 measurement,NA,Megaloblastic anemia
+HP:0004860,281.1,EFO:0004620,vitamin B12 measurement,NA,Megaloblastic anemia
+HP:0003339,281.1,EFO:0004620,vitamin B12 measurement,NA,Megaloblastic anemia
+HP:0004826,281.1,EFO:0004620,vitamin B12 measurement,NA,Megaloblastic anemia
+HP:0001980,281.1,EFO:0004620,vitamin B12 measurement,NA,Megaloblastic anemia
+HP:0004845,204.3,NA,NA,NA,Monocytic leukemia
+HP:0006775,204.4,EFO:0001378,multiple myeloma,NA,Multiple myeloma
+HP:0011974,289.1,NA,NA,Myelofibrosis,Myelofibrosis
+HP:0012324,204.2,NA,NA,NA,Myeloid leukemia
+HP:0004820,204.21,EFO:0000222,acute myeloid leukemia,NA,"Myeloid leukemia, acute"
+HP:0004808,204.21,EFO:0000222,acute myeloid leukemia,NA,"Myeloid leukemia, acute"
+HP:0012209,204.21,EFO:0000222,acute myeloid leukemia,NA,"Myeloid leukemia, acute"
+HP:0004836,204.21,EFO:0000222,acute myeloid leukemia,NA,"Myeloid leukemia, acute"
+HP:0002863,200,NA,NA,NA,Myeloproliferative disease
+HP:0005547,200,NA,NA,NA,Myeloproliferative disease
+HP:0004861,200,NA,NA,NA,Myeloproliferative disease
+HP:0005505,200,NA,NA,NA,Myeloproliferative disease
+HP:0005523,200,NA,NA,NA,Myeloproliferative disease
+HP:0001871,NA,NA,NA,Abnormality of blood and blood-forming tissues,NA
+HP:0011031,NA,NA,NA,Abnormality of iron homeostasis,NA
+HP:0011906,NA,NA,NA,Reduced beta/alpha synthesis ratio,NA
+HP:0001875,288.11,EFO:0004833,neutrophil count,NA,Neutropenia
+HP:0040289,288.11,EFO:0004833,neutrophil count,NA,Neutropenia
+HP:0005541,288.11,EFO:0004833,neutrophil count,NA,Neutropenia
+HP:0001913,288.11,EFO:0004833,neutrophil count,NA,Neutropenia
+HP:0001904,288.11,EFO:0004833,neutrophil count,NA,Neutropenia
+HP:0004870,283.2,NA,NA,NA,Non-autoimmune hemolytic anemias
+HP:0001937,283.2,NA,NA,NA,Non-autoimmune hemolytic anemias
+HP:0004926,458.1,NA,NA,NA,Orthostatic hypotension
+HP:0001278,458.1,NA,NA,NA,Orthostatic hypotension
+HP:0005307,458.1,NA,NA,NA,Orthostatic hypotension
+HP:0001892,286.7,NA,NA,Abnormal bleeding,Other and unspecified coagulation defects
+HP:0001903,285,NA,NA,NA,Other anemias
+HP:0001895,285,NA,NA,NA,Other anemias
+HP:0001897,285,NA,NA,NA,Other anemias
+HP:0004819,285,NA,NA,NA,Other anemias
+HP:0001894,289,NA,NA,NA,Other diseases of blood and blood-forming organs
+HP:0012133,289,NA,NA,NA,Other diseases of blood and blood-forming organs
+HP:0005518,289,NA,NA,NA,Other diseases of blood and blood-forming organs
+HP:0004445,282.9,NA,NA,NA,Other hereditary hemolytic anemias
+HP:0004446,282.9,NA,NA,NA,Other hereditary hemolytic anemias
+HP:0004444,282.9,NA,NA,NA,Other hereditary hemolytic anemias
+HP:0004835,282.9,NA,NA,NA,Other hereditary hemolytic anemias
+HP:0005543,286.81,NA,NA,NA,Primary hypercoagulable state
+HP:0012175,286.81,NA,NA,NA,Primary hypercoagulable state
+HP:0004855,286.81,NA,NA,NA,Primary hypercoagulable state
+HP:0001976,286.81,NA,NA,Reduced antithrombin III activity,Primary hypercoagulable state
+HP:0001973,287.31,NA,NA,NA,Primary thrombocytopenia
+HP:0004859,287.31,NA,NA,NA,Primary thrombocytopenia
+HP:0008320,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0011872,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0001902,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0003540,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0008148,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0004866,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0001872,287.4,NA,NA,NA,Qualitative platelet defects
+HP:0001896,282.5,NA,NA,NA,Sickle cell anemia
+HP:0001924,285.3,NA,NA,NA,Sideroblastic anemia
+HP:0006268,579.2,NA,NA,NA,Splenomegaly
+HP:0001744,579.2,NA,NA,Splenomegaly,Splenomegaly
+HP:0040185,287.3,NA,NA,Macrothrombocytopenia,Thrombocytopenia
+HP:0004854,287.3,NA,NA,NA,Thrombocytopenia
+HP:0001873,287.3,NA,NA,Thrombocytopenia,Thrombocytopenia

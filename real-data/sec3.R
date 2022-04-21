@@ -97,7 +97,15 @@ tidy(t.test(tot$geuv_eur_s))
 tidy(t.test(tot$geuv_eur, tot$geuv_eur_s))
 tidy(t.test(tot$geuv_yri, tot$geuv_yri_s))
 
-load("../data/twas.RData")
+load("./data/twas.RData")
+
+twas_all %>%
+  filter(POP != "meta") %>%
+  group_by(PHEN, POP) %>%
+  filter(TWAS.P < 0.05/4579) %>%
+  group_by(PHEN) %>%
+  summarize(n = n()) %>%
+  arrange(desc(n))
 
 # TWAS region
 # twas_re <- twas_all %>%

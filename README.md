@@ -72,7 +72,7 @@ Simulation data is in `/simulation/data/*.RDat` with above different scenario na
 
 #### Figures
 
-The R codes that generate figures is in `/simulation/draw.R`, which depends on `/simulation/figure_style.R`
+The R codes that generate figures is in `/simulation/plot.R`, which depends on `/simulation/figure_style.R`
 
 #### Manuscript
 
@@ -87,7 +87,7 @@ We omit the scripts for the basic cleaning and manipulation of GWAS, TWAS, MA-FO
 
 #### Figures
 
-The R codes that generate figures is in `/real-data/draw.R`, which depends on `/real-data/figure_style.R`. All necessary data locate in `/real-data/data/`.
+The R codes that generate figures is in `/real-data/plot.R`, which depends on `/real-data/figure_style.R`. All necessary data locate in `/real-data/data/`.
 
 #### Manuscript
 

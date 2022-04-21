@@ -210,24 +210,14 @@ mean(log(b$bf))
 load("../data/enrich_aapower_2.RData")
 mapper <- read_csv("../enrich/DisGeNET_meta_categories.csv")
 
-# cate <- c("Hematological measurement",
-#   "Abnormality, disorder, or disease of the immune system",
-#   "Abnormality or disease of blood and blood-forming tissues", 
-#   "Abnormality or disorder of the cardiovascular system")
-
-cate <- c("Hematological measurement")
-
-catelevel <- c("Hematological\nmeasurement",
-  "Immune\nsystem",
-  "Blood\ntissues", 
-  "Cardiovascular\nsystem")
+cate <- c()
 
 enrichment.results.df %>%
   left_join(mapper %>%
       select(Term, `meta_category`),
     by = "Term") %>%
   filter(!is.na(`meta_category`)) %>%
-  filter(`meta_category` %in% cate) %>%
+  filter(`meta_category` %in% "Hematological measurement") %>%
   # group_by(TEST, PHENO) %>%
   filter(`Adjusted.P.value` < 0.05) %>%
   group_by(TEST) %>%
@@ -238,7 +228,7 @@ enrichment.results.df %>%
       select(Term, `meta_category`),
     by = "Term") %>%
   filter(!is.na(`meta_category`)) %>%
-  filter(`meta_category` %in% cate) %>%
+  filter(`meta_category` %in% "Hematological measurement") %>%
   # group_by(TEST, PHENO) %>%
   filter(`Adjusted.P.value` < 0.05) %>%
   group_by(TEST) %>%
@@ -381,3 +371,28 @@ for (i in 1:nrow(ME.specific.genes)) {
   plot.locus.PIPs(focus_all, block=block, pheno=pheno, tests=c("EA","AA","ME","meta"), highlight.gene=highlight.genes, main=paste0(pheno,", idx=",i," - MA FOCUS"))
   plot.locus.Pvals(focus_all, block=block, pheno=pheno, tests=c("EA","AA","meta"), highlight.gene=highlight.genes)
 }
+
+# two proportion test
+b1 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.EA & IN.CRED.SET.ME)
+
+b2 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.AA & IN.CRED.SET.ME)
+
+b3 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.EA | IN.CRED.SET.ME)
+
+b4 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.AA | IN.CRED.SET.ME)
+
+prop.test(c(nrow(b1), nrow(b2)), n=c(nrow(b3), nrow(b4)))
+
+
+
+
+
+
