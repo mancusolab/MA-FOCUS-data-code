@@ -1,14 +1,33 @@
 library(tidyverse)
 library(ggpubr)
 library(broom)
+library(xlsx)
 
-# Supplementary tables 1-3 and 5 are either manually typed or directly modified after downloading.
+# Supplementary tables 1, 3 and 5 are either manually typed or directly modified after downloading.
+
+# Supplementary table 2
+
+dd <- read.xlsx("data//admixture_sample_sizes_before_kinship_filtering.xlsx", sheetIndex = 1) %>%
+  pivot_longer(cols = ACB:YRI) %>%
+  filter(!grepl("GENOA", name)) %>%
+  rename(`Population code` = name) %>%
+  left_join(read_tsv("data/igsr_samples.tsv") %>%
+      filter(!is.na(`Population code`)) %>%
+      filter(!grepl(",", `Superpopulation name`)) %>%
+      distinct(`Superpopulation code`, `Superpopulation name`,
+        `Population code`, `Population name`),
+    by = "Population code") %>%
+  select(`Superpopulation code`, `Superpopulation name`,
+    `Population code`, `Population name`, value)
+
+# write_tsv(dd, "table-s2.tsv", quote_escape = FALSE)
 
 
 # Supplementary table 4
 
 tt3 <- read_csv("./data/DisGeNET_meta_categories.csv") %>%
-  filter(meta_category %in% "Hematological measurement")
+  filter(meta_category %in% "Hematological measurement") %>%
+  select(-MedGen_UID, -`HP/EFO`, -DOID)
 
 # write_tsv(tt3, "./table/meta_cate.tsv", quote_escape = FALSE)
 

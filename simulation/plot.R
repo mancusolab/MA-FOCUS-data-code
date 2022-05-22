@@ -1006,7 +1006,7 @@ gs3POPN1 <- ggplot(ddGS3POPN1, aes(x=X, y=value, fill=pop, group=Label)) +
         breaks= c(1.5, 4, 6.5),
         labels = c("75k", "150k", "300k")) +
     scale_y_continuous(name=ylabel_num)
-pip3POPN1 <- addMeanMedian(pip3POPN1)
+gs3POPN1 <- addMeanMedian(gs3POPN1)
 
 ddFT3POPN1 <- dd4 %>%
     select(totalGS, locus, `ME.pip`, true_model, eqtl.model, pop) %>%

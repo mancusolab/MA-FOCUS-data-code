@@ -27,7 +27,7 @@ LABELS5 <- c("ME.pip"="MA-FOCUS", "pop1.pip"="EUR FOCUS")
 
 COLS6 <- c("2-Pop" = "#24492e", "3-Pop" = "#89689d")
 
-LABELS6 <- c("2-Pop" = "2-Pop MA-FOCUS", "3-Pop" = "3-Pop MA-FOCUS")
+LABELS6 <- c("2-Pop" = "Two-ancestry MA-FOCUS", "3-Pop" = "Three-ancestry MA-FOCUS")
 
 
 scientific <- function(x){

@@ -1,45 +1,51 @@
 library(tidyverse)
 library(broom)
 
-load("../data/focus_aapower38_2.RData")
+load("./data/focus_all.RData")
 
-load("../data/focus.RData")
+phens <- c("RBC","RDW","WBC","PLT","MPV","LYM","NEU","MON","BAS","EOS","HGB","HCT","MCV","MCH","MCHC")
 
-load("../data/focus_all.RData")
+focus_analysis <- tibble()
+for (phen in phens) {
+  # twas_sig_ld_both_LYM.bed
+  LD1 <- read_tsv(paste0("./data/sig_region/twas_ld_sig/twas_sig_ld_region_", phen,
+    "_EA.bed"), col_names = FALSE)
+  LD2 <- read_tsv(paste0("./data/sig_region/twas_ld_sig/twas_sig_ld_region_", phen,
+    "_AA.bed"), col_names = FALSE)
+  if (nrow(LD1) != 0 & nrow(LD2) != 0) {
+    tot <- inner_join(LD1, LD2, by = c("X1", "X2","X3")) %>%
+      distinct() %>%
+      unite("X0", X1, X2,  sep = ":") %>%
+      unite("haha", X0, X3, sep = "..") %>%
+      unlist()
+    if (length(tot) != 0 ){
+      focus_analysis <- focus_analysis2 %>%
+        bind_rows(focus_all %>%
+            filter(PHEN == phen & BLOCK %in% tot))
+    }
+  }
+}
 
-# load("../data/focus_redu.RData")
-load("../data/twas.RData")
-
-focus_AApower38 <- filter(focus_AApower38, !is.na(ID))
-
-genoa_all <- read_tsv("../data/genoa_her_total.tsv")
-
-tt <- focus_AApower38 %>%
-  filter(PIP.ME > 0.8) %>%
-  select(ID, TWAS.Z.EA, TWAS.Z.AA) %>%
-  inner_join(genoa_all %>%
-      select(GENE, POP, VG) %>%
-      pivot_wider(names_from = POP, values_from = VG),
-    by = c("ID" = "GENE")) %>%
-  mutate(tmpEA = TWAS.Z.EA/sqrt(ea),
-    tmpAA = TWAS.Z.AA/sqrt(aa))
-
-glance(lm(tmpEA ~ tmpAA, tt))
-tidy(lm(TWAS.Z.EA ~ TWAS.Z.AA, tt))
-glance(lm(TWAS.Z.EA ~ TWAS.Z.AA, tt))
+# save(focus_analysis, file = "./data/focus_analysis.RData")
 
 
+load("./data/focus_analysis.RData")
+load("./data/twas.RData")
 
-ggplot(tt, aes(x = ))
+focus_analysis <- filter(focus_analysis, !is.na(ID))
 
-length(unique(focus_AApower38$PHEN))
-length(unique(focus_AApower38$ID))
-length(unique(focus_AApower38$BLOCK))
+# we applied MA-FOCUS to TWAS results for 11 blood traits focusing on 163 genes
+# overlapping the 23 (11 unique) regions that contained TWAS signals
+# for both EA and AA ancestry for a given trait (see Methods)
 
-focus_AApower38 %>%
+length(unique(focus_analysis$PHEN))
+length(unique(focus_analysis$ID))
+
+focus_analysis %>%
   distinct(PHEN, BLOCK)
+length(unique(focus_analysis$BLOCK))
 
-tmp <- focus_AApower38 %>%
+tmp <- focus_analysis %>%
   pivot_longer(c(PIP.EA, IN.CRED.SET.EA, PIP.AA, IN.CRED.SET.AA,
     PIP.ME, IN.CRED.SET.ME, PIP.meta, IN.CRED.SET.meta)) %>%
   mutate(name = gsub("IN\\.CRED\\.SET\\.", "IN\\.", name)) %>%
@@ -51,21 +57,18 @@ tmp <- focus_AApower38 %>%
   arrange(desc(PIP)) %>%
   mutate(rank = row_number())
 
+# ). Across these 23 trait-specific regions, each contained an average of 7.35 TWAS significant
+# associations across ancestries and 3.17 genes in the 90%-credible gene set, none of which
+# included the null model.
 
-length(unique(tmp$BLOCK))
-length(unique(tmp$PHEN))
-length(unique(tmp$ID))
-
-
-# how many sig TWAS in the region
 sigt <- twas_all %>%
   group_by(PHEN, POP) %>%
   filter(TWAS.P < 0.05/4579 & POP != "meta") %>%
-  distinct(ID, PHEN, POP) %>%
+  distinct(ID, PHEN) %>%
   mutate(TWAS = 1) %>%
   ungroup()
 
-focus_AApower38 %>%
+focus_analysis %>%
   filter(!grepl("NULL", ID)) %>%
   select(ID, BLOCK, PHEN) %>%
   left_join(sigt, by = c("ID", "PHEN")) %>%
@@ -73,21 +76,6 @@ focus_AApower38 %>%
   summarize(n = sum(TWAS, na.rm = TRUE)) %>%
   ungroup() %>%
   summarize(n = mean(n))
-
-
-
-# how manny regions
-focus_AApower38 %>%
-  filter(IN.CRED.SET.ME) %>%
-  filter(!grepl("NULL", ID)) %>%
-  group_by(PHEN) %>%
-  distinct(BLOCK)
-
-focus_AApower38 %>%
-  filter(IN.CRED.SET.ME) %>%
-  filter(!grepl("NULL", ID)) %>%
-  group_by(PHEN) %>%
-  distinct(BLOCK)
 
 # average CGS per locus
 tmp %>%
@@ -101,9 +89,9 @@ tmp %>%
 tmp %>%
   filter(grepl("NULL", ID))
 
+# We estimated an average of 2.88 causal genes per region by summing over local PIPs
+# in the credible sets, with 19 out of 23 credible sets containing three or fewer genes
 
-
-# average causal genes
 tmp %>%
   filter(!grepl("NULL", ID)) %>%
   filter(POP == "ME") %>%
@@ -117,24 +105,16 @@ tmp %>%
   filter(POP == "ME") %>%
   group_by(PHEN, BLOCK) %>%
   summarize(cgs = n()) %>%
-  filter(cgs == 3)
-
-tmp %>%
-  filter(!grepl("NULL", ID)) %>%
-  filter(POP == "ME") %>%
-  group_by(PHEN, BLOCK) %>%
-  summarize(cgs = n()) %>%
   filter(cgs <= 3)
 
+# The average maximum PIP across credible sets was 0.99 (SD=0.02) and
+# retained similar PIPs for the second and the third rank 
 
-# average max rank PIP 
 tmp %>%
   # filter(!grepl("NULL", ID)) %>%
   filter(POP == "ME") %>%
   filter(rank == 1) %>%
   group_by(PHEN, BLOCK) %>%
-  mutate(maxpip = PIP == max(PIP)) %>%
-  filter(maxpip) %>%
   ungroup() %>%
   distinct(PIP) %>%
   summarize(maxx = mean(PIP),
@@ -142,75 +122,282 @@ tmp %>%
 
 tmp %>%
   # filter(!grepl("NULL", ID)) %>%
-  filter(POP == "ME") 
+  filter(POP == "ME") %>%
+  filter(rank == 2) %>%
+  group_by(PHEN, BLOCK) %>%
+  ungroup() %>%
+  distinct(PIP) %>%
+  summarize(maxx = mean(PIP),
+    sd = sd(PIP))
 
-focus_AApower38 %>% 
+tmp %>%
+  # filter(!grepl("NULL", ID)) %>%
+  filter(POP == "ME") %>%
+  filter(rank == 3) %>%
+  group_by(PHEN, BLOCK) %>%
+  ungroup() %>%
+  distinct(PIP) %>%
+  summarize(maxx = mean(PIP),
+    sd = sd(PIP))
+
+# we observed MA-FOCUS output higher means and smaller standard deviations of PIPs
+# (P<0.05 for all tests MA-FOCUS obtained a smaller credible gene set on average (3.17)
+# compared to the baseline (3.35); however, this result was not significant due to low
+# statistical power (P=0.22
+
+tt <- tmp %>%
+  filter(IN == 1) %>%
+  group_by(PHEN, BLOCK, POP) %>%
+  summarise(m = n(),
+    vpip = var(PIP),
+    mpip = mean(PIP)) %>%
+  pivot_wider(names_from = POP, values_from = m:mpip)
+
+tidy(t.test(tt$m_ME, tt$m_meta, alternative = "less"))
+# tidy(t.test(tt$m_ME, tt$m_EA, alternative = "less"))
+# tidy(t.test(tt$m_ME, tt$m_AA, alternative = "less"))
+
+
+# var.test(lm(tt$vpip_ME~1), lm(tt$vpip_EA~1), alternative = "less")
+var.test(lm(tt$vpip_ME~1), lm(tt$vpip_meta~1), alternative = "less")
+# var.test(lm(tt$vpip_ME~1), lm(tt$vpip_AA~1), alternative = "less")
+
+tidy(t.test(tt$mpip_ME, tt$mpip_meta, alternative = "greater"))
+# tidy(t.test(tt$mpip_ME, tt$mpip_EA, alternative = "greater"))
+# tidy(t.test(tt$mpip_ME, tt$mpip_AA, alternative = "greater"))
+
+# In addition, EA FOCUS did not prioritize 30 out of 73 trait-gene pairs in MA-FOCUS
+# credible gene sets and missed 7 out of 23 lead genes
+
+focus_analysis %>% 
   group_by(BLOCK, PHEN) %>%
   arrange(desc(PIP.ME)) %>%
   mutate(rank = row_number()) %>%
   filter(IN.CRED.SET.ME & !IN.CRED.SET.EA)
 
 
-focus_AApower38 %>% 
+focus_analysis %>% 
   group_by(BLOCK, PHEN) %>%
   arrange(desc(PIP.ME)) %>%
   mutate(rank = row_number()) %>%
   filter(rank == 1 & !IN.CRED.SET.EA)
 
-focus_AApower38 %>% 
-  group_by(BLOCK, PHEN) %>%
-  arrange(desc(PIP.ME)) %>%
-  mutate(rank = row_number()) %>%
-  filter(rank == 1 & !IN.CRED.SET.AA)
+# We observed little support for a difference in the percentage of genes co-prioritized
+# by AA FOCUS/MA-FOCUS (40.2%) compared with EA FOCUS/MA-FOCUS (49.5%; two-sample
+# proportion test P=0.24
+b1 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.EA & IN.CRED.SET.ME)
 
+b2 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.AA & IN.CRED.SET.ME)
 
-# MA-FOCUS cred sets (already done)
-b <- focus_AApower38 %>%
+b3 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.EA | IN.CRED.SET.ME)
+
+b4 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.AA | IN.CRED.SET.ME)
+
+prop.test(c(nrow(b1), nrow(b2)), n=c(nrow(b3), nrow(b4)))
+
+# We observed an average log-scale BF of 1.44 (SD=3.76), suggesting that credible-set
+# genes underlying these blood traits are much more likely to be shared across ancestries
+# than ancestry-specific (Figure S20). For instance, NPRL3 in the trait MCV had a
+# log-scale BF of 17.1, which we discuss below 
+
+b <- focus_analysis %>%
   filter(IN.CRED.SET.ME == 1) %>%
   select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
-  mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)))
+  mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)),
+    logbf = log(bf))
 
-mean(log(b$bf))
+mean(b$logbf)
+sd(b$logbf)
+t.test(b$logbf, alternative = "greater")
+filter(b, PHEN == "MCV" & ID == "NPRL3")
 
-# Baseline cred sets
-b <- focus_AApower38 %>%
-  filter(IN.CRED.SET.meta == 1) %>%
-  select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
-  mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)))
+# we re-performed fine-mapping varying the maximum number of causal genes allowed in a
+# configuration (see Methods) and found that while inferred PIPs were relatively stable
+# (P=7.17×10^(-56)), credible gene sets sizes were sensitive to the upper
+# bound on causal genes (see Supplementary Note
 
-mean(log(b$bf))
+load("./data/focus_maxgene5.RData")
 
-# EUR-FOCUS cred sets
-b <- focus_AApower38 %>%
-  filter(IN.CRED.SET.EA == 1) %>%
-  select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
-  mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)))
+load("./data/focus_maxgene1.RData")
 
-mean(log(b$bf))
+compMax <- function(dd1, dd2, method) {
+  PIPvar <- sym(paste0("PIP.", method))
+  INvar <- sym(paste0("IN.CRED.SET.", method))
+  
+  tmp1 <- dd1 %>%
+    filter(!grepl("NULL", ID)) %>%
+    select(PHEN, BLOCK, ID, p1 = !!PIPvar,  i1 = !!INvar) %>%
+    inner_join(dd2 %>%
+        select(PHEN, BLOCK, ID, p2 = !!PIPvar,  i2 = !!INvar),
+      by = c("PHEN", "BLOCK", "ID"))
+  print("PIP correlation:")
+  print(tidy(cor.test(tmp1$p1, tmp1$p2)))
+  
+  cgs <- tmp1 %>%
+    pivot_longer(cols = c(i1, i2)) %>%
+    group_by(PHEN, BLOCK, name) %>%
+    summarize(ss = sum(value)) %>%
+    pivot_wider(values_from = ss, names_from = name)
+  
+  print("CGS comparison:")
+  print(tidy(t.test(cgs$i1, cgs$i2)))
+  
+  backgr <- dd1 %>%
+    filter(!grepl("NULL", ID)) %>%
+    filter(!!INvar) %>%
+    group_by(PHEN, BLOCK) %>%
+    filter(!!PIPvar == max(!!PIPvar)) %>%
+    select(PHEN, BLOCK, ID, !!PIPvar)
+  
+  tmp2 <- dd1 %>%
+    filter(!grepl("NULL", ID)) %>%
+    filter(!!INvar) %>%
+    group_by(PHEN, BLOCK) %>%
+    filter(!!PIPvar == max(!!PIPvar)) %>%
+    select(PHEN, BLOCK, ID, !!PIPvar) %>%
+    inner_join(dd2 %>%
+        filter(!grepl("NULL", ID)) %>%
+        filter(!!INvar) %>%
+        group_by(PHEN, BLOCK) %>%
+        filter(!!PIPvar == max(!!PIPvar)) %>%
+        select(PHEN, BLOCK, ID, !!PIPvar),
+      by = c("PHEN", "BLOCK", "ID"))
+  print(paste0("Lead gene changes from ", nrow(backgr), ":"))
+  print(nrow(tmp2))
+  
+  tmp3 <- dd1 %>%
+    filter(!grepl("NULL", ID)) %>%
+    filter(!!INvar) %>%
+    group_by(PHEN, BLOCK) %>%
+    mutate(rank1 = dense_rank(desc(!!PIPvar))) %>%
+    filter(!!PIPvar == max(!!PIPvar)) %>%
+    select(PHEN, BLOCK, ID, rank1, !!PIPvar) %>%
+    right_join(dd2 %>%
+        filter(!grepl("NULL", ID)) %>%
+        # filter(IN.CRED.SET.ME) %>%
+        group_by(PHEN, BLOCK) %>%
+        mutate(rank2 = dense_rank(desc(!!PIPvar))) %>%
+        select(PHEN, BLOCK, ID, rank2),
+      by = c("PHEN", "BLOCK", "ID")) %>%
+    filter(!is.na(rank1) & rank2 != 1)
+  
+  print(paste0("Rank change from lead gene of ", nrow(backgr), ":"))
+  print(tmp3$rank2[order(tmp3$rank2)])
+  
+  tmp4 <- dd1 %>%
+    filter(!grepl("NULL", ID)) %>%
+    mutate(rank1 = dense_rank(desc(!!PIPvar))) %>%
+    select(PHEN, BLOCK, ID, rank1) %>%
+    left_join(dd2 %>%
+        filter(!grepl("NULL", ID)) %>%
+        # filter(IN.CRED.SET.ME) %>%
+        mutate(rank2 = dense_rank(desc(!!PIPvar))) %>%
+        select(PHEN, BLOCK, ID, rank2),
+      by = c("PHEN", "BLOCK", "ID"))
+  
+  print("Rank corr:")
+  print(tidy(cor.test(tmp4$rank1, tmp4$rank2)))
+}
 
-# AFR-FOCUS cred sets
-b <- focus_AApower38 %>%
-  filter(IN.CRED.SET.AA == 1) %>%
-  select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
-  mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)))
+compMax(focus_analysis, focus_maxgene5, "ME")
+compMax(focus_analysis, focus_maxgene1, "ME")
 
-mean(log(b$bf))
-
-# All results MA-FOCUS results [no cred set]
-b <- focus_AApower38 %>%
+tmp4 <- focus_analysis %>%
   filter(!grepl("NULL", ID)) %>%
-  # filter(IN.CRED.SET.meta == 1) %>%
-  select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
-  mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)))
+  filter(IN.CRED.SET.ME) %>%
+  group_by(PHEN, BLOCK) %>%
+  filter(PIP.ME == max(PIP.ME)) %>%
+  mutate(rank1 = dense_rank(desc(PIP.ME))) %>%
+  select(PHEN, BLOCK, ID, rank1) %>%
+  left_join(focus_maxgene1 %>%
+      filter(!grepl("NULL", ID)) %>%
+      group_by(PHEN, BLOCK) %>%
+      # filter(IN.CRED.SET.ME) %>%
+      mutate(rank2 = dense_rank(desc(PIP.ME))) %>%
+      select(PHEN, BLOCK, ID, rank2),
+    by = c("PHEN", "BLOCK", "ID"))
 
-mean(log(b$bf))
+nrow(filter(tmp4, rank2 == 1))
+nrow(filter(tmp4, rank2 == 2)) + nrow(filter(tmp4, rank2 == 3))
+nrow(filter(tmp4, rank2 > 10))
+
+compMax(focus_analysis, focus_maxgene1, "meta")
+compMax(focus_analysis, focus_maxgene1, "EA")
+compMax(focus_analysis, focus_maxgene1, "AA")
+compMax(focus_analysis, focus_maxgene5, "meta")
+compMax(focus_analysis, focus_maxgene5, "EA")
+compMax(focus_analysis, focus_maxgene5, "AA")
+
+# of the 49 genes in GENOA-based credible sets, 17 had GEUVADIS-weight-derived results
+# with a PIP correlation estimate of 0.84 (P=2.05×10^(-5)). In addition, 13 out of 17
+# genes were the lead genes from GENOA, and among these 13 genes, ten remained lead
+# genes from GEUVADIS
+
+load("./data/focus_geuvadis.RData")
+focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.ME) %>%
+  distinct(ID)
+
+tmp2 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.ME) %>%
+  group_by(PHEN, BLOCK) %>%
+  mutate(rank1 = PIP.ME %in% max(PIP.ME)) %>%
+  select(PHEN, BLOCK, ID, PIP.ME.N = PIP.ME, rank1) %>%
+  left_join(focus_geuvadis %>%
+      filter(IN.CRED.SET.ME) %>%
+      filter(!grepl("NULL", ID)) %>%
+      group_by(PHEN, BLOCK) %>%
+      mutate(rank2 = PIP.ME %in% max(PIP.ME)) %>%
+      select(PHEN, BLOCK, ID, PIP.ME.GEU = PIP.ME, rank2),
+    by = c("PHEN", "BLOCK", "ID")) %>%
+  drop_na()
+
+tidy(cor.test(tmp2$PIP.ME.GEU, tmp2$PIP.ME.N))
+filter(tmp2, rank1)
+filter(tmp2, rank1 & rank2)
+
+# we investigated genes to which MA-FOCUS assigned a high PIP (> 0.75) 
+# we found that all 22 baseline-specific genes had low PIPs (< 0.1) from ancestry-specific
+# fine-mapping in at least one ancestry, while 12 of these genes had a low PIP in both ancestries.
+# On the other hand, only one out of 31 total MA-FOCUS-specific genes had PIPs
+# below 0.1 in both AA and EA. We found six out of 31 total MA-FOCUS-specific genes
+# achieved a moderate PIP of at least 0.25 in both EA and AA ancestry-specific 
+# fine-mapping (ARNT, BAK1, MRPL28, NPRL3, PHTF1, and TARS2
+
+tmp1 <- focus_analysis %>%
+  filter(PIP.ME > 0.75 & IN.CRED.SET.ME & !IN.CRED.SET.meta)
+
+tmp2 <- focus_analysis %>%
+  filter(PIP.meta > 0.75 & !IN.CRED.SET.ME & IN.CRED.SET.meta)
+
+nrow(tmp2)
+all(tmp2$PIP.AA  < 0.1 | tmp2$PIP.EA < 0.1)
+sum(tmp2$PIP.AA  < 0.1 & tmp2$PIP.EA < 0.1)
+
+nrow(tmp1)
+sum(tmp1$PIP.AA  < 0.1 & tmp1$PIP.EA < 0.1)
+
+tmp1 %>%
+  filter(PIP.AA  > 0.25 & PIP.EA > 0.25) %>%
+  arrange(ID) %>%
+  select(ID)
+
+
 
 # enrichment 
 # method 1
-load("../data/enrich_aapower_2.RData")
-mapper <- read_csv("../enrich/DisGeNET_meta_categories.csv")
-
-cate <- c()
+load("./data/enrich.RData")
+mapper <- read_csv("./data/DisGeNET_meta_categories.csv")
 
 enrichment.results.df %>%
   left_join(mapper %>%
@@ -233,21 +420,6 @@ enrichment.results.df %>%
   filter(`Adjusted.P.value` < 0.05) %>%
   group_by(TEST) %>%
   summarize(X2 = -2*sum(log(Adjusted.P.value)), dof = 2*n(), P = pchisq(X2, dof, lower.tail=FALSE))
-
-# enrDD <- enrichment.results.df %>%
-#   left_join(mapper %>%
-#       select(Term, `meta_category`),
-#     by = "Term") %>%
-#   filter(!is.na(`meta_category`)) %>%
-#   filter(`meta_category` %in% cate)#  %>%
-#   # group_by(TEST, PHENO) %>%
-#   #filter(`Adjusted.P.value` < 0.05/60) 
-# 
-# enrDD %>% group_by(TEST) %>% summarize(mean(-log10(`Adjusted.P.value`)))
-# enrDD %>% group_by(TEST) %>% summarize(N=n(), mean(-log10(`Adjusted.P.value`)))
-# library(tidyverse)
-# library(ggbeeswarm)
-# ggplot(enrDD, aes(x=TEST, y = -log10(`Adjusted.P.value`)))  + geom_beeswarm()
 
 # method 2
 lk <- c("Blood basophil count (lab test)",
@@ -274,125 +446,41 @@ enrichment.results.df %>%
   group_by(TEST) %>%
   summarize(X2 = -2*sum(log(Adjusted.P.value)), dof = 2*n(), P = pchisq(X2, dof, lower.tail=FALSE))
 
-
-
-
-
 # silver
-
-
-dd <- read_tsv("../table/38_by_block_together2.tsv")
+dd <- read_tsv("./data/silver.tsv")
 mean(dd$PIP.ME)
 mean(dd$PIP.meta)
 
 
+# WBC
+tmp %>%
+  ungroup() %>%
+  distinct(BLOCK, PHEN)
 
-focus_all <- as.data.frame(focus_AApower38)
-# ;rm(focus_AApower)
+tmp %>%
+  ungroup() %>%
+  distinct(BLOCK, PHEN) %>%
+  group_by(PHEN) %>%
+  summarize(n = n())
 
-# Negate function
-`%ni%` <- Negate(`%in%`)
+cgs <- tmp %>%
+  filter(PHEN %in% "WBC" & POP %in% c("meta", "ME")) %>%
+  group_by(BLOCK, PHEN, POP) %>%
+  summarize(cgs = n()) %>%
+  pivot_wider(names_from = POP, values_from = cgs)
 
-# PIP locus zoom plot function
-plot.locus.PIPs <- function(dat, tests, block, pheno, highlight.gene, colours=c("#e3d691BF", "#5ea9d4BF", "#d68592BF","#34ada1BF"), ...) {
-  dat2 <- dat[dat$BLOCK==block & dat$PHEN==pheno,]
-  ## Determine x-axis positions
-  x.pos <- apply(dat2[,c(grep("P0", colnames(dat2)), grep("P1", colnames(dat2)))], MARGIN=1, mean)
-  names(x.pos) <- dat2$ID; x.pos <- sort(x.pos)
-  # Plot null model at x=1
-  x.pos[1] <-1
-  # Start plotting genes at x=2
-  x.pos[-1] <- round(x.pos[-1]-x.pos[2]+2)
-  # Adjust spacing so total plot is 12 units wide
-  x.dist.adj <- as.numeric(max(x.pos) - x.pos[2])/10
-  x.pos[-(1:2)] <- signif(x.pos[-(1:2)]/x.dist.adj + x.pos[2],3)
-  ## Make plot
-  plot(x=x.pos, y=rep(0, length(x.pos)), ylim=c(0,1), type="n", xlab="", ylab="Posterior Inclusion Probability", xaxt="n", yaxt="n", ...)
-  abline(v=1.5, lwd=3)
-  axis(2, las=2)
-  axis(1, las=2, labels=names(x.pos[-match(highlight.gene, names(x.pos))]), at=x.pos[-match(highlight.gene, names(x.pos))], cex.axis=0.8)
-  axis(1, las=2, labels=highlight.gene, at=x.pos[highlight.gene], cex.axis=0.8, col.axis ="red", font=2)
-  for (test in tests) {
-    idx <- match(test, tests)
-    points(x.pos, dat2[match(names(x.pos),dat2$ID), paste0("PIP.",test)], pch=16, col=colours[idx], cex=1.4)
-  }
-}
+tidy(t.test(cgs$ME, cgs$meta, alternative = "less"))
 
-# P-value locus zoom plot function
-plot.locus.Pvals <- function(dat, tests, block, pheno, highlight.gene, colours=c("#e3d691BF", "#5ea9d4BF","#34ada1BF"), ...) {
-  dat2 <- dat[dat$BLOCK==block & dat$PHEN==pheno,]
-  ## Determine x-axis positions
-  x.pos <- apply(dat2[,c(grep("P0", colnames(dat2)), grep("P1", colnames(dat2)))], MARGIN=1, mean)
-  names(x.pos) <- dat2$ID; x.pos <- sort(x.pos)
-  # Plot null model at x=1
-  x.pos[1] <-1
-  # Start plotting genes at x=2
-  x.pos[-1] <- round(x.pos[-1]-x.pos[2]+2)
-  # Adjust spacing so total plot is 12 units wide
-  x.dist.adj <- as.numeric(max(x.pos) - x.pos[2])/10
-  x.pos[-(1:2)] <- signif(x.pos[-(1:2)]/x.dist.adj + x.pos[2],3)
-  ## Make plot
-  p.vals <- -log10(na.omit(unlist(dat2[,grep("P.val", colnames(dat2))])))
-  y.lim <- c(0, max(p.vals[is.finite(p.vals)]))
-  y.lim[2] <- y.lim[2] * 1.01
-  plot(x=x.pos, y=rep(0, length(x.pos)), ylim=y.lim, type="n", xlab="", ylab="-log10 P-value", xaxt="n", yaxt="n", ...)
-  abline(v=1.5, lwd=3)
-  axis(2, las=2)
-  axis(1, las=2, labels=names(x.pos[-match(c("NULL",highlight.gene), names(x.pos))]), at=x.pos[-match(c("NULL",highlight.gene), names(x.pos))], cex.axis=0.8)
-  axis(1, las=2, labels=highlight.gene, at=x.pos[highlight.gene], cex.axis=0.8, col.axis ="red", font=2)
-  for (test in tests) {
-    idx <- match(test, tests)
-    points(x.pos[-1], -log10(dat2[match(names(x.pos[-1]),dat2$ID), paste0("TWAS.P.val.", test)]), pch=16, col=colours[idx], cex=1.4)
-  }
-}
+pip <- tmp %>%
+  filter(PHEN %in% "WBC" & POP %in% c("meta", "ME")) %>%
+  pivot_wider(names_from = POP, values_from = PIP)
 
-### Analysis ----
-# Find genes have high PIPs in one method, but are not in the CG set of the other
-PIP.thresh <- 0.75
-ME.specific.genes <- focus_all[focus_all$IN.CRED.SET.ME==T & focus_all$PIP.ME>PIP.thresh & focus_all$IN.CRED.SET.meta==F & focus_all$ID!="NULL",]
-meta.specific.genes <- focus_all[focus_all$IN.CRED.SET.meta==T & focus_all$PIP.meta>PIP.thresh & focus_all$IN.CRED.SET.ME==F & focus_all$ID!="NULL",]
+tidy(t.test(pip$ME, pip$meta, alternative = "greater"))
 
-### Figure S19 ----
-# plot EA and AA PIP distributions for each set of genes
-par(mfrow=c(1,2))
-for (test in c("ME","meta")) {
-  dat <- get(paste0(test,".specific.genes"))
-  if (test=="ME") {name="MA-FOCUS"} else if (test=="meta") {name="baseline"}
-  plot(dat$PIP.EA, dat$PIP.AA, xlim=c(0,1), ylim=c(0,1), pch=16, cex=2, col=rgb(0,0,1,0.3), xlab="EA FOCUS PIP", ylab="AA FOCUS PIP", main=name)
-}
-
-### Figure S20 ----
-# make locus zoom plots
-par(mfcol=c(6,2))
-for (i in 1:nrow(ME.specific.genes)) {
-  block <- ME.specific.genes[i,"BLOCK"]
-  pheno <- ME.specific.genes[i,"PHEN"]
-  highlight.genes <- ME.specific.genes[ME.specific.genes$BLOCK==block & ME.specific.genes$PHEN==pheno, "ID"]
-  plot.locus.PIPs(focus_all, block=block, pheno=pheno, tests=c("EA","AA","ME","meta"), highlight.gene=highlight.genes, main=paste0(pheno,", idx=",i," - MA FOCUS"))
-  plot.locus.Pvals(focus_all, block=block, pheno=pheno, tests=c("EA","AA","meta"), highlight.gene=highlight.genes)
-}
-
-# two proportion test
-b1 <- focus_analysis %>%
-  filter(!grepl("NULL", ID)) %>%
-  filter(IN.CRED.SET.EA & IN.CRED.SET.ME)
-
-b2 <- focus_analysis %>%
-  filter(!grepl("NULL", ID)) %>%
-  filter(IN.CRED.SET.AA & IN.CRED.SET.ME)
-
-b3 <- focus_analysis %>%
-  filter(!grepl("NULL", ID)) %>%
-  filter(IN.CRED.SET.EA | IN.CRED.SET.ME)
-
-b4 <- focus_analysis %>%
-  filter(!grepl("NULL", ID)) %>%
-  filter(IN.CRED.SET.AA | IN.CRED.SET.ME)
-
-prop.test(c(nrow(b1), nrow(b2)), n=c(nrow(b3), nrow(b4)))
-
-
-
+tmp %>%
+  filter(BLOCK %in% "1:151566405..154721871" & PHEN %in% "WBC" & POP %in% "ME") %>%
+  mutate(rank = dense_rank(desc(PIP))) %>%
+  select(ID, PIP, rank)
 
 
 

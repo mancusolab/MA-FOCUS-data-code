@@ -112,29 +112,48 @@ ps12 <- ggarrange(ps121, ps122,
   labels = c("A", "B"), nrow = 2)
 ggsave("figure-s12.png", plot = ps12, path = "./plot/", height = two_row_height, width = onehalf_col)
 
-# Figure s13 (admixture analysis plot) is drew used pong. See script XXXX
+# Figure S13 (admixture analysis plot) is drew used pong. See Methods and other folder named "admixture"
 
-# comparison r2, s14
+# Figure S14 
+
+genoa_aa1 <- read_csv("data/AA_GENOA-AFR-anc_unrelateds_original.csv")
+genoa_aa2 <- read_csv("data/AA_GENOA_0.75-AFR-anc.csv")
+
+admix_aa <- genoa_aa1 %>%
+  mutate(group = "B: 441 individuals used in GENOA analysis") %>%
+  bind_rows(genoa_aa2 %>%
+      mutate(group = "A: 380 individuals filtering 75% West African ancestry"))
+
+ps14 <- ggplot(admix_aa, aes(x = AFR)) +
+  geom_histogram(fill="white", color = "black") +
+  facet_wrap(~group, scales = "free") +
+  theme_corr() +
+  ylab("Count") +
+  xlab("West African ancestry proportion")
+
+ggsave("figure-s14.png", plot = ps14, path = "./plot/", height = one_row_height, width = two_col)
+
+
+# comparison r2, s15
 tot <- read_tsv("./data/total_r2.tsv")
 
 tmptot <- tot %>%
   pivot_longer(-gene) %>%
   mutate(group = factor(ifelse(grepl("(ea)|(eur)", name), "A: EA/EUR participants", "B: AA/YRI participants"),
     levels = c("A: EA/EUR participants", "B: AA/YRI participants")),
-    cVar = ifelse(name %in% c("ea", "aa"), "A",
-      ifelse(name %in% c("genoa_ea_s", "genoa_aa_s"), "B",
-        ifelse(name %in% c("geuv_eur", "geuv_yri"), "C", "D"))))
+    cVar = factor(ifelse(name %in% c("ea", "aa"), "Prediction\nCV",
+      ifelse(name %in% c("genoa_ea", "genoa_aa"), "GENOA\nSimilar-Ancestry",
+        ifelse(name %in% c("genoa_ea_s", "genoa_aa_s"), "GENOA\nCross-Ancestry",
+          ifelse(name %in% c("geuv_eur", "geuv_yri"), "GEUVADIS\nSimilar-Ancestry", "GEUVADIS\nCross-Ancestry")))),
+      levels = c("Prediction\nCV", "GENOA\nSimilar-Ancestry","GENOA\nCross-Ancestry", 
+        "GEUVADIS\nSimilar-Ancestry", "GEUVADIS\nCross-Ancestry")))
 
 
-ps14 <- ggplot(tmptot, aes(x = cVar, y = value)) +
+ps15 <- ggplot(tmptot, aes(x = cVar, y = value)) +
   geom_boxplot(outlier.shape = NA) +
   ylim(c(0, 0.3)) +
   facet_wrap(~group, nrow = 2) +
   ylab(expression(bolditalic(r)^{2})) +
-  scale_x_discrete(labels = c("A" = expression(bold("Pred. CV")),
-    "B" = expression(bold("GENOA Cross-Pop")),
-    "C" = expression(bold("GEUVADIS Similar-Pop")),
-    "D" = expression(bold("GEUVADIS Cross-Pop")))) +
   theme(panel.grid.major.x = element_blank(),
     strip.background = element_blank(),
     panel.grid.major.y = element_line(size = 0.2, color = "grey70"),
@@ -142,13 +161,12 @@ ps14 <- ggplot(tmptot, aes(x = cVar, y = value)) +
     panel.border = element_rect(fill = NA),
     legend.title = element_blank(),
     axis.title.x = element_blank(),
-    strip.text = element_text(face = "bold"),
-    axis.title=element_text(size=x_axis_size,face="bold"))
+    text=element_text(size=x_axis_size,face="bold"))
 
-ggsave("figure-s14.png", plot = ps14, path = "./plot/", height = two_row_height, width = two_col)
+ggsave("figure-s15.png", plot = ps15, path = "./plot/", height = two_row_height, width = two_col)
 
 
- load("./data/focus_analysis.RData")
+load("./data/focus_analysis.RData")
 load("./data/twas.RData")
 
 theme_ma <- function() {
@@ -162,7 +180,7 @@ theme_ma <- function() {
     text=element_text(size = fontsize,  family = ffont))
 }
 
-# TWAS normalized statistics  s15
+# TWAS normalized statistics  s16
 #  aggregated
 a <- twas_all %>%
   filter(!POP %in% "meta") %>%
@@ -170,7 +188,7 @@ a <- twas_all %>%
   pivot_wider(names_from = POP, values_from = TWAS.Z.NORM) %>%
   mutate(PHEN = factor(PHEN, levels = phens))
 
-ps151 <- ggplot(a, aes(x = EA, y = AA)) +
+ps161 <- ggplot(a, aes(x = EA, y = AA)) +
   geom_point() +
   stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau")) +
   geom_smooth(method = "lm") +
@@ -179,8 +197,7 @@ ps151 <- ggplot(a, aes(x = EA, y = AA)) +
   ylab("AA Norm. TWAS Z")
 
 # by trait
-
-ps152 <- ggplot(a, aes(x = EA, y = AA)) +
+ps162 <- ggplot(a, aes(x = EA, y = AA)) +
   geom_point() +
   stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau")) +
   geom_smooth(method = "lm") +
@@ -190,9 +207,9 @@ ps152 <- ggplot(a, aes(x = EA, y = AA)) +
   ylab("AA Norm. TWAS Z")
 
 
-ps15 <- ggarrange(ps151, ps152, nrow = 2, labels = c("A", "B"), heights = c(1.3, 3),
+ps16 <- ggarrange(ps161, ps162, nrow = 2, labels = c("A", "B"), heights = c(1.3, 3),
   font.label = list(size = arrange_label_size))
-ggsave("./figure-s15.png", plot = ps15, path = "./plot/", height = two_row_height*2, width = two_col)
+ggsave("./figure-s16.png", plot = ps16, path = "./plot/", height = two_row_height*2, width = two_col)
 
 
 tmp <- focus_analysis %>%
@@ -208,7 +225,7 @@ tmp <- focus_analysis %>%
   mutate(rank = row_number())
 
 
-# average PIP  s16
+# average PIP  s17
 a <- tmp %>%
   # filter(POP %in% "ME") %>%
   # filter(!grepl("NULL", ID)) %>%
@@ -220,7 +237,7 @@ a <- tmp %>%
     n = n(),
     se = sd(PIP)/sqrt(n))
 
-ps16 <- ggplot(a, aes(x = rank, y = pip, group = POP, color = POP)) +
+ps17 <- ggplot(a, aes(x = rank, y = pip, group = POP, color = POP)) +
   geom_point() +
   scale_color_manual(values = COLS3, labels = LABELS3) +
   geom_errorbar(aes(ymin = pip - se, ymax = pip + se), width = 0.5) +
@@ -231,7 +248,7 @@ ps16 <- ggplot(a, aes(x = rank, y = pip, group = POP, color = POP)) +
   theme_ma()
 
 
-ggsave("figure-s16.png", plot = ps16, path = "./plot/", height = one_row_height, width = two_col)
+ggsave("figure-s17.png", plot = ps17, path = "./plot/", height = one_row_height, width = two_col)
 
 
 # making PIP plots m6
@@ -319,9 +336,9 @@ p6 <- ggarrange(ggarrange(p1, p2, labels = c("A", "B"), ncol = 2,
 ggsave("figure-m6.pdf", plot = p6, path = "./plot/", height = two_row_height, width = two_col,
   dpi = 300)
 
-# PIP correlation s17
+# PIP correlation s18
 
-ps171 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.meta)) +
+ps181 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.meta)) +
   geom_point(size = 0.1) +
   theme_ma() +
   stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"), color = "red", fontface = "bold") +
@@ -329,28 +346,28 @@ ps171 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.meta)) +
   xlab("MA-FOCUS PIP") +
   ylab("Baseline PIP")
 
-ps172 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.EA)) +
+ps182 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.EA)) +
   geom_point(size = 0.1) +
   theme_ma() +
   stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"), color = "red") +
   geom_smooth(method = "lm") +
   xlab("MA-FOCUS PIP") +
-  ylab("EA PIP")
+  ylab("EA FOCUS PIP")
 
-ps173 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.AA)) +
+ps183 <- ggplot(focus_analysis, aes(x = PIP.ME, y = PIP.AA)) +
   geom_point(size = 0.1) +
   theme_ma() +
   stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"), color = "red") +
   geom_smooth(method = "lm") +
   xlab("MA-FOCUS PIP") +
-  ylab("AA PIP")
+  ylab("AA FOCUS PIP")
 
 
-ps17 <- ggarrange(ps171, ps172, ps173, nrow = 1, labels = c("A", "B", "C"),
+ps18 <- ggarrange(ps181, ps182, ps183, nrow = 1, labels = c("A", "B", "C"),
   font.label = list(size = arrange_label_size))
-ggsave("figure-s17.png", plot = ps17, path = "./plot/", height = one_row_height, width = two_col)
+ggsave("figure-s18.png", plot = ps18, path = "./plot/", height = one_row_height, width = two_col)
 
-# upset plots s18
+# upset plots s19
 library(ggvenn)
 library(ggpubr)
 aa <- focus_analysis %>%
@@ -368,14 +385,20 @@ me <- focus_analysis %>%
   filter(IN.CRED.SET.ME) %>%
   mutate(name = paste0(ID, PHEN))
 
+me <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  filter(IN.CRED.SET.meta) %>%
+  mutate(name = paste0(ID, PHEN))
+
 a1 <- ggvenn(list(AA = aa$name, MA = me$name), text_size = 2)
 a2 <- ggvenn(list(EA = ea$name, MA = me$name), text_size = 2)
 a3 <- ggvenn(list(AA = aa$name, EA = ea$name), text_size = 2)
+a4 <- ggvenn(list(Baseline = me$name, EA = ea$name), text_size = 2)
 vg <- ggarrange(a1, a2, a3, nrow = 1)
 
 library(UpSetR)
 
-ps18dd <- focus_analysis %>%
+ps19dd <- focus_analysis %>%
   filter(!grepl("NULL", ID)) %>%
   mutate(ME = as.numeric(IN.CRED.SET.ME),
     meta = as.numeric(IN.CRED.SET.meta),
@@ -388,13 +411,13 @@ ps18dd <- focus_analysis %>%
     `AA FOCUS` = AA) %>%
   filter(complete.cases(.)) %>%
   as.data.frame()
-us <- upset(ps18dd, sets = c("MA-FOCUS", "Baseline", "EA FOCUS", "AA FOCUS"),
+us <- upset(ps19dd, sets = c("MA-FOCUS", "Baseline", "EA FOCUS", "AA FOCUS"),
   order.by = "freq", keep.order = T, empty.intersections = "on") 
 
 usp <- cowplot::plot_grid(NULL, us$Main_bar, us$Sizes, us$Matrix, nrow=2, align="hv",
   rel_heights = c(1.5,1), rel_widths = c(1,3))
-ps18 <- ggarrange(usp, vg, ncol = 1, labels = c("A", "B"), heights = c(3, 2))
-ggsave(filename = "figure-s18.png", plot = ps18, path = "./plot/", width = two_col, height = two_row_height)
+ps19 <- ggarrange(usp, vg, ncol = 1, labels = c("A", "B"), heights = c(3, 2))
+ggsave(filename = "figure-s19.png", plot = ps19, path = "./plot/", width = two_col, height = two_row_height)
 
 
 # TWAS manhattan plots m5
@@ -606,7 +629,7 @@ p7 <- ggarrange(p71, p72, nrow = 1, labels = c("A", "B"),
 ggsave("figure-m7.pdf", plot = p7, path = "./plot/", height = one_row_height, width = two_col,
   dpi = 300)
 
-# s19
+# s20
 b1 <- focus_analysis %>%
   filter(IN.CRED.SET.ME == 1) %>%
   select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
@@ -619,32 +642,36 @@ b <- focus_analysis %>%
   mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)),
     logbf = log(bf),
     gr = "ME") %>%
-  select(gr, logbf) %>%
+  select(gr, ID, logbf) %>%
   bind_rows(focus_analysis %>%
       filter(IN.CRED.SET.meta == 1) %>%
       select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
       mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)),
         logbf = log(bf),
         gr = "Baseline") %>%
-      select(gr, logbf)) %>%
+      select(gr, ID, logbf)) %>%
   bind_rows(focus_analysis %>%
       filter(IN.CRED.SET.EA == 1) %>%
       select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
       mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)),
         logbf = log(bf),
         gr = "EA") %>%
-      select(gr, logbf)) %>%
+      select(gr, ID, logbf)) %>%
   bind_rows(focus_analysis %>%
       filter(IN.CRED.SET.AA == 1) %>%
       select(BLOCK, PHEN, ID, PIP.ME, PIP.EA, PIP.AA) %>%
       mutate(bf = PIP.ME/((PIP.EA*(1-PIP.AA)) + PIP.AA*(1-PIP.EA)),
         logbf = log(bf),
         gr = "AA") %>%
-      select(gr,logbf)) %>%
+      select(gr,ID, logbf)) %>%
   mutate(gr = factor(gr, levels = c("ME", "Baseline", "EA", "AA"),
-    labels = c("A: ME", "B: Baseline", "C: EA", "D: AA")))
+    labels = c("A: MA-FOCUS", "B: Baseline", "C: EA FOCUS", "D: AA FOCUS")))
 
-ps19 <- ggplot(b, aes(x = logbf)) +
+ann_text <- data.frame(ID = "NPRL3", logbf = 17.1198,
+  gr = factor("A: MA-FOCUS",levels = c("A: MA-FOCUS", "B: Baseline", "C: EA FOCUS", "D: AA FOCUS")))
+# p + geom_text(data = ann_text,label = "Text")
+
+ps20 <- ggplot(b, aes(x = logbf)) +
   facet_wrap(~gr, scales = "free") +
   geom_histogram() +
   theme_ma() +
@@ -656,8 +683,154 @@ ps19 <- ggplot(b, aes(x = logbf)) +
     panel.background = element_rect(fill = "white"),
     panel.border = element_rect(fill = NA),
     legend.title = element_blank(),
-    text=element_text(size = fontsize, face="bold", family = ffont))
+    text=element_text(size = fontsize, face="bold", family = ffont)) +
+  geom_text(data = ann_text, aes(x = logbf, y=5), label = expression(italic(NPRL3)), size = 1)
 
-ggsave("figure-s19.png", plot = ps19, path = "./plot/", height = one_row_height, width = one_col)
+ggsave("figure-s20.png", plot = ps20, path = "./plot/", height = one_row_height, width = one_col)
+
+
+# Figure s21
+load("./data/focus_analysis.RData")
+
+load("./data/focus_maxgene5.RData")
+
+load("./data/focus_maxgene1.RData")
+
+tmp1 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  select(PHEN, BLOCK, ID, p1 = PIP.ME,  i1 = IN.CRED.SET.ME) %>%
+  inner_join(focus_maxgene5 %>%
+      select(PHEN, BLOCK, ID, p2 = PIP.ME,  i2 = IN.CRED.SET.ME),
+    by = c("PHEN", "BLOCK", "ID"))
+# mutate(scn = "A: Five-gene Scenario") %>%
+# select(scn, ID, p1, p2) %>%
+tmp2 <- focus_analysis %>%
+  filter(!grepl("NULL", ID)) %>%
+  select(PHEN, BLOCK, ID, p1 = PIP.ME,  i1 = IN.CRED.SET.ME) %>%
+  inner_join(focus_maxgene1 %>%
+      select(PHEN, BLOCK, ID, p2 = PIP.ME,  i2 = IN.CRED.SET.ME),
+    by = c("PHEN", "BLOCK", "ID"))
+
+
+ps211 <- ggplot(tmp1, aes(x = p1, y = p2)) +
+  geom_point(size = 0.1) +
+  theme_ma() +
+  stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"), color = "red") +
+  geom_smooth(method = "lm") +
+  xlab("Three-gene Scenario PIP") +
+  ylab("Five-gene Scenario PIP")
+
+ps212 <- ggplot(tmp2, aes(x = p1, y = p2)) +
+  geom_point(size = 0.1) +
+  theme_ma() +
+  stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"), color = "red") +
+  geom_smooth(method = "lm") +
+  xlab("Three-gene Scenario PIP") +
+  ylab("One-gene Scenario PIP")
+
+ps21 <- ggarrange(ps211, ps212,  nrow = 1, labels = c("A", "B"),
+  font.label = list(size = arrange_label_size))
+ggsave("figure-s21.png", plot = ps21, path = "./plot/", height = one_row_height, width = two_col)
+
+
+
+
+# figure s21 and s22
+
+### Load data, define functions ----
+focus_analysis <- as.data.frame(focus_analysis)
+
+# Negate function
+`%ni%` <- Negate(`%in%`)
+
+# PIP locus zoom plot function
+plot.locus.PIPs <- function(dat, tests, block, pheno, highlight.gene, colours=c("#e3d691BF", "#5ea9d4BF", "#d68592BF","#34ada1BF"), ...) {
+  dat2 <- dat[dat$BLOCK==block & dat$PHEN==pheno,]
+  ## Determine x-axis positions
+  x.pos <- apply(dat2[,c(grep("P0", colnames(dat2)), grep("P1", colnames(dat2)))], MARGIN=1, mean)
+  names(x.pos) <- dat2$ID; x.pos <- sort(x.pos)
+  # Plot null model at x=1
+  x.pos[1] <-1
+  # Start plotting genes at x=2
+  x.pos[-1] <- round(x.pos[-1]-x.pos[2]+2)
+  # Adjust spacing so total plot is 12 units wide
+  x.dist.adj <- as.numeric(max(x.pos) - x.pos[2])/10
+  x.pos[-(1:2)] <- signif(x.pos[-(1:2)]/x.dist.adj + x.pos[2],3)
+  ## Make plot
+  plot(x=x.pos, y=rep(0, length(x.pos)), ylim=c(0,1), type="n", xlab="", ylab="Posterior Inclusion Probability", xaxt="n", yaxt="n", ...)
+  abline(v=1.5, lwd=3)
+  axis(2, las=2)
+  axis(1, las=2, labels=names(x.pos[-match(highlight.gene, names(x.pos))]), at=x.pos[-match(highlight.gene, names(x.pos))], cex.axis=0.8)
+  axis(1, las=2, labels=highlight.gene, at=x.pos[highlight.gene], cex.axis=0.8, col.axis ="red", font=2)
+  for (test in tests) {
+    idx <- match(test, tests)
+    points(x.pos, dat2[match(names(x.pos),dat2$ID), paste0("PIP.",test)], pch=16, col=colours[idx], cex=1.4)
+  }
+}
+
+# P-value locus zoom plot function
+plot.locus.Pvals <- function(dat, tests, block, pheno, highlight.gene, colours=c("#e3d691BF", "#5ea9d4BF","#34ada1BF"), ...) {
+  dat2 <- dat[dat$BLOCK==block & dat$PHEN==pheno,]
+  ## Determine x-axis positions
+  x.pos <- apply(dat2[,c(grep("P0", colnames(dat2)), grep("P1", colnames(dat2)))], MARGIN=1, mean)
+  names(x.pos) <- dat2$ID; x.pos <- sort(x.pos)
+  # Plot null model at x=1
+  x.pos[1] <-1
+  # Start plotting genes at x=2
+  x.pos[-1] <- round(x.pos[-1]-x.pos[2]+2)
+  # Adjust spacing so total plot is 12 units wide
+  x.dist.adj <- as.numeric(max(x.pos) - x.pos[2])/10
+  x.pos[-(1:2)] <- signif(x.pos[-(1:2)]/x.dist.adj + x.pos[2],3)
+  ## Make plot
+  p.vals <- -log10(na.omit(unlist(dat2[,grep("P.val", colnames(dat2))])))
+  y.lim <- c(0, max(p.vals[is.finite(p.vals)]))
+  y.lim[2] <- y.lim[2] * 1.01
+  plot(x=x.pos, y=rep(0, length(x.pos)), ylim=y.lim, type="n", xlab="", ylab="-log10 P-value", xaxt="n", yaxt="n", ...)
+  abline(v=1.5, lwd=3)
+  axis(2, las=2)
+  axis(1, las=2, labels=names(x.pos[-match(c("NULL",highlight.gene), names(x.pos))]), at=x.pos[-match(c("NULL",highlight.gene), names(x.pos))], cex.axis=0.8)
+  axis(1, las=2, labels=highlight.gene, at=x.pos[highlight.gene], cex.axis=0.8, col.axis ="red", font=2)
+  for (test in tests) {
+    idx <- match(test, tests)
+    points(x.pos[-1], -log10(dat2[match(names(x.pos[-1]),dat2$ID), paste0("TWAS.P.val.", test)]), pch=16, col=colours[idx], cex=1.4)
+  }
+}
+
+### Analysis ----
+# Find genes have high PIPs in one method, but are not in the CG set of the other
+PIP.thresh <- 0.75
+ME.specific.genes <- focus_analysis[focus_analysis$IN.CRED.SET.ME==T & focus_analysis$PIP.ME>PIP.thresh & focus_analysis$IN.CRED.SET.meta==F & focus_analysis$ID!="NULL",]
+meta.specific.genes <- focus_analysis[focus_analysis$IN.CRED.SET.meta==T & focus_analysis$PIP.meta>PIP.thresh & focus_analysis$IN.CRED.SET.ME==F & focus_analysis$ID!="NULL",]
+
+# s22
+# plot EA and AA PIP distributions for each set of genes
+par(mfcol=c(1,2))
+for (test in c("ME","meta")) {
+  dat <- get(paste0(test,".specific.genes"))
+  if (test=="ME") {
+    name="A: MA-FOCUS-specific genes"
+  } else if (test=="meta") {
+    name="B: baseline-specific genes"
+  }
+  plot(dat$PIP.EA, dat$PIP.AA, xlim=c(0,1), ylim=c(0,1), pch=16, cex=2,
+    col=rgb(0,0,1,0.3), xlab="EA FOCUS PIP", ylab="AA FOCUS PIP", main=name)
+}
+
+# Use Rstudio to save the figure s20
+
+# s23
+# make locus zoom plots
+# png("./plot/figure-s22.png", res=150, width = 2000, height = 2000)
+par(mfcol=c(6,2))
+for (i in 1:nrow(ME.specific.genes)) {
+  block <- ME.specific.genes[i,"BLOCK"]
+  pheno <- ME.specific.genes[i,"PHEN"]
+  highlight.genes <- ME.specific.genes[ME.specific.genes$BLOCK==block & ME.specific.genes$PHEN==pheno, "ID"]
+  plot.locus.PIPs(focus_analysis, block=block, pheno=pheno, tests=c("EA","AA","ME","meta"), highlight.gene=highlight.genes, main=paste0(pheno,", idx=",i," - MA FOCUS"))
+  plot.locus.Pvals(focus_analysis, block=block, pheno=pheno, tests=c("EA","AA","meta"), highlight.gene=highlight.genes)
+}
+# dev.off()
+
+
 
 
