@@ -1,6 +1,8 @@
 library(tidyverse)
 library(broom)
 
+phens <- c("RBC","RDW","WBC","PLT","MPV","LYM","NEU","MON","BAS","EOS","HGB","HCT","MCV","MCH","MCHC")
+
 genoa_ea <- read_tsv("./data/genoa_heritability_ea_all_genes.tsv", col_names = FALSE)
 colnames(genoa_ea) <- c("GENE", "GENEID", "POP", "HSQ", "HSQSE", "HSQP", "VG", "VGSE")
 
@@ -123,7 +125,7 @@ twas_all %>%
  distinct(ID)
 
 read_table2("./data/sig_region/twas_all_ld_region.bed", col_names = FALSE) %>%
-  distinct()
+  distinct(X1, X2, X3)
 
 # we identified a total of 6,236 (2,009 unique) and 116 (57 unique) genome-wide TWAS
 # significant genes in EA and AA, respectively, in 3,032 (622 unique) regions
@@ -138,7 +140,7 @@ length(unique((filter(sig, POP == "EA")$ID)))
 nrow(filter(sig, POP == "AA"))
 length(unique((filter(sig, POP == "AA")$ID)))
 
-phens <- c("RBC","RDW","WBC","PLT","MPV","LYM","NEU","MON","BAS","EOS","HGB","HCT","MCV","MCH","MCHC")
+
 # # to get TWAS sig gene position
 # for (phen in phens) {
 #   for (pop in c("EA", "AA")){
@@ -152,7 +154,6 @@ phens <- c("RBC","RDW","WBC","PLT","MPV","LYM","NEU","MON","BAS","EOS","HGB","HC
 #       phen, "_", pop, ".bed"), quote_escape = FALSE, col_names = FALSE)
 #   }
 # }
-
 
 # after bedtoools, read in the regions
 res <- tibble()
@@ -293,24 +294,30 @@ for (phen in phens) {
   res <- bind_rows(res, tmp)
 }
 res %>%
-  group_by(X1, X2, X3, PHEN, POO) %>%
+  group_by(X1, X2, X3, PHEN) %>%
   summarize(n = n()) %>%
   filter(n >=2) %>%
   ungroup() %>%
-  select(-POO, -n) %>%
+  select(-n) %>%
   distinct()
 
 res %>%
-  group_by(X1, X2, X3, PHEN, POO) %>%
+  group_by(X1, X2, X3, PHEN) %>%
   summarize(n = n()) %>%
   filter(n >=2) %>%
   ungroup() %>%
   distinct(X1, X2, X3)
 
 res %>%
-  group_by(X1, X2, X3, PHEN, POO) %>%
+  group_by(X1, X2, X3, PHEN) %>%
   summarize(n = n()) %>%
   filter(n >=2) %>%
+  ungroup() %>%
+  summarize(nn = mean(n))
+
+res %>%
+  group_by(X1, X2, X3, PHEN) %>%
+  summarize(n = n()) %>%
   ungroup() %>%
   summarize(nn = mean(n))
 

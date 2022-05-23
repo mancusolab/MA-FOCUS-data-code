@@ -7,7 +7,6 @@ phens <- c("RBC","RDW","WBC","PLT","MPV","LYM","NEU","MON","BAS","EOS","HGB","HC
 
 focus_analysis <- tibble()
 for (phen in phens) {
-  # twas_sig_ld_both_LYM.bed
   LD1 <- read_tsv(paste0("./data/sig_region/twas_ld_sig/twas_sig_ld_region_", phen,
     "_EA.bed"), col_names = FALSE)
   LD2 <- read_tsv(paste0("./data/sig_region/twas_ld_sig/twas_sig_ld_region_", phen,
@@ -57,13 +56,14 @@ tmp <- focus_analysis %>%
   arrange(desc(PIP)) %>%
   mutate(rank = row_number())
 
-# ). Across these 23 trait-specific regions, each contained an average of 7.35 TWAS significant
+# ). Across these 23 trait-specific regions, each contained an average of 6.13 TWAS significant
 # associations across ancestries and 3.17 genes in the 90%-credible gene set, none of which
 # included the null model.
 
 sigt <- twas_all %>%
   group_by(PHEN, POP) %>%
   filter(TWAS.P < 0.05/4579 & POP != "meta") %>%
+  ungroup() %>%
   distinct(ID, PHEN) %>%
   mutate(TWAS = 1) %>%
   ungroup()
@@ -392,8 +392,6 @@ tmp1 %>%
   arrange(ID) %>%
   select(ID)
 
-
-
 # enrichment 
 # method 1
 load("./data/enrich.RData")
@@ -478,9 +476,19 @@ pip <- tmp %>%
 tidy(t.test(pip$ME, pip$meta, alternative = "greater"))
 
 tmp %>%
+  filter(PHEN %in% "WBC" & POP %in% "ME") %>%
+  select(ID, PIP, PIP)
+
+tmp %>%
   filter(BLOCK %in% "1:151566405..154721871" & PHEN %in% "WBC" & POP %in% "ME") %>%
   mutate(rank = dense_rank(desc(PIP))) %>%
   select(ID, PIP, rank)
 
+# discussion
+
+twas_all %>%
+  filter(POP != "meta") %>%
+  group_by(PHEN, POP) %>%
+  filter(TWAS.P < 0.05/4579)
 
 
