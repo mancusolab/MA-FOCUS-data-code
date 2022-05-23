@@ -4,6 +4,10 @@ Please follow below instructions in order to replicate both our simulation and r
 
 If you have any questions, please contact Zeyun Lu at zeyunlu@usc.edu or Nicholas Mancuso at Nicholas.Mancuso@med.usc.edu.
 
+## Main Figures
+
+You can find Figure 1 and Figure S1 in `/mainfigure/*`, and see below for other other figures.
+
 ## Simulation
 
 We make bash script read in parameter files and then plug into python files with different scenarios.
@@ -81,7 +85,7 @@ The result section 1 and 2 in manuscript contain the statistics computed in `/si
 
 ## Real-data
 
-The scripts for the basic cleaning and manipulation of GWAS, TWAS, MA-FOCUS, and heritability results can be found in `/running/*`.
+The scripts for the basic cleaning and manipulation of GWAS, TWAS, MA-FOCUS, and heritability results can be found in `/real-data/running/*`.
 
 ### Analysis
 
