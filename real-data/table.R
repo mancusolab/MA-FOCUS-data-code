@@ -1,15 +1,12 @@
 library(tidyverse)
 library(ggpubr)
 library(broom)
-library(xlsx)
+
 
 # Supplementary tables 1, 3 and 5 are either manually typed or directly modified after downloading.
 
 # Supplementary table 2
-
-dd <- read.xlsx("data//admixture_sample_sizes_before_kinship_filtering.xlsx", sheetIndex = 1) %>%
-  pivot_longer(cols = ACB:YRI) %>%
-  filter(!grepl("GENOA", name)) %>%
+dd <- read_tsv("data/admixture_sample_size.tsv") %>%
   rename(`Population code` = name) %>%
   left_join(read_tsv("data/igsr_samples.tsv") %>%
       filter(!is.na(`Population code`)) %>%

@@ -31,7 +31,7 @@ Two bash scripts:
 
 Specify and run `/simulation/generate_param.R` to make parameter files.
 
-#### Run MA-FOCUS
+#### Run simulation for MA-FOCUS
 
 There are 5 bash scripts `/simulation/codes/bash/me_focus_sim*.sh` for 5 scenarios:
 
@@ -81,7 +81,7 @@ The result section 1 and 2 in manuscript contain the statistics computed in `/si
 
 ## Real-data
 
-We omit the scripts for the basic cleaning and manipulation of GWAS, TWAS, MA-FOCUS, and heritability results.
+The scripts for the basic cleaning and manipulation of GWAS, TWAS, MA-FOCUS, and heritability results can be found in `/running/*`.
 
 ### Analysis
 
@@ -95,16 +95,38 @@ The R codes that generate result section 3 and 4 locates in `/real-data/sec3.R` 
 
 The order of the statistics may not match that in manuscript, but all the numbers should be covered by this script. Sometimes, the P-value is divided by two because we want to test one tail while the R regression results give us two tailed P-value.
 
-#### Data
+The entire codes for admixture analysis can be found in `real-data/admixture/*`
+#### Table
 
+The R codes that generate tables is in `/real-data/talbe.R`.
+#### Data
+The default path is in `/real-data/data/`
 | Analysis Results | Paths |
 | ------------- | ----- |
-| TWAS | `/real-data/data/twas.RData` |
-| MA-FOCUS | `/real-data/data/focus.RData` |
-| Enrichment | `/real-data/data/enrich.RData` |
-| Silver | `/real-data/data/silver_result.tsv` |
-| DisGeNET Category | `/real-data/data/DisGeNET_meta_categories.csv` |
-| GENOA Heritability | `/real-data/data/genoa_her_total.tsv` |
-| GEUVADIS Heritability | `/real-data/data//real-data/data/geuvadis_her_total.tsv` |
-| Genetic Variance CV R2 | `/real-data/data/total_r2.tsv` |
-| TWAS&GWAS Correlation | `/real-data/data/twas_gwas_corr.tsv` |
+|  GWAS signal summary statistics for 115 regions that do not exhibit genome-wide signals | `115_gwas_signal.tsv` |
+| Admixture 1000G sample size | `Adadmixture_sample_size.tsv` |
+| TWAS | `twas.RData` |
+| TWAS using GEUVADIS weights | `twas_geuvadis.RData` |
+| MA-FOCUS all data (no matter TWAS significant or not) | `focus_all.RData` |
+| MA-FOCUS data (no matter TWAS significant or not) using GEUVADIS weights | `focus_geuvadis.RData` |
+| MA-FOCUS data (no matter TWAS significant or not) using maxcausal = 1 | `focus_maxgene1.RData` |
+| MA-FOCUS data (no matter TWAS significant or not) using maxcausal = 5 | `focus_maxgene5.RData` |
+| MA-FOCUS all data (TWAS significant for both ancestries; our analysis data) | `focus_analysis.RData` |
+| Enrichment | `enrich.RData` |
+| Silver | `silver.tsv` |
+| DisGeNET Category | `DisGeNET_meta_categories.csv` |
+| Traits used in enrichment analysis | `restricted_blood_traits.csv` |
+| GENOA Heritability (all genes for ea) | `genoa_heritability_ea_all_genes.tsv` |
+| GENOA Heritability (all genes for aa) | `genoa_heritability_aa_all_genes.tsv` |
+| GENOA Heritability (analyzed genes) | `genoa_heritability_analyzed.tsv` |
+| GEUVADIS Heritability | `geuvadis_her_total.tsv` |
+| Genetic Variance CV R2 | `total_r2.tsv` |
+| TWAS&GWAS Correlation | `twas_gwas_corr.tsv` |
+| Gencode GRCh38 | `gencode.v26.GRCh38.genes.only.tsv` |
+| GWAS signals on each LD block | `gwas_all_z2_signals.tsv` |
+| 1000G subjects information | `igsr_samples.tsv` |
+| Genomic regions with TWAS signals but without GWAS signals | `region_TWAS_nonGWAS.tsv` |
+| LD blocks that doesn't have GWAS signals | `all_gwas_not_sig_ld.bed` |
+| LD blocks of TWAS genes | `twas_all_ld_region.bed` |
+| LD blocks that has GWAS signals | `gwas_ld_sig/*` |
+| LD blocks that has TWAS signals | `twas_ld_sig` |
