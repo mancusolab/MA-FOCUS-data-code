@@ -278,7 +278,7 @@ for (i in 1:n) {
 (sum(tmp_meta > mean(ddsig$meanchi_meta))+1)/(n+1)
 
 # Of the 3,032 (622 unique) LD blocks containing TWAS hits, 1,329 (315 unique) contained
-# multiple TWAS significant associations (average 3.56 genes per region), thus motivating
+# multiple TWAS significant associations (average 3.60 genes per region), thus motivating
 # the use of gene fine-mapping. 
 
 # multiple TWAS region
@@ -293,12 +293,13 @@ for (phen in phens) {
       POO="EA")
   res <- bind_rows(res, tmp)
 }
+
 res %>%
-  group_by(X1, X2, X3, PHEN) %>%
+  group_by(X1, X2, X3, PHEN, POO) %>%
   summarize(n = n()) %>%
   filter(n >=2) %>%
   ungroup() %>%
-  select(-n) %>%
+  select(-POO, -n) %>%
   distinct()
 
 res %>%
@@ -314,13 +315,6 @@ res %>%
   filter(n >=2) %>%
   ungroup() %>%
   summarize(nn = mean(n))
-
-res %>%
-  group_by(X1, X2, X3, PHEN) %>%
-  summarize(n = n()) %>%
-  ungroup() %>%
-  summarize(nn = mean(n))
-
 
 # Of the 6,352 significantly associated genes from GENOA across 15 traits and two ancestries,
 # 4,315 were assayed in GEUVADIS, and 2,265 exhibited transcriptome-wide significance

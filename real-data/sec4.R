@@ -18,7 +18,7 @@ for (phen in phens) {
       unite("haha", X0, X3, sep = "..") %>%
       unlist()
     if (length(tot) != 0 ){
-      focus_analysis <- focus_analysis2 %>%
+      focus_analysis <- focus_analysis %>%
         bind_rows(focus_all %>%
             filter(PHEN == phen & BLOCK %in% tot))
     }

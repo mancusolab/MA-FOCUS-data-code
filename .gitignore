@@ -1,7 +1,8 @@
 # History files
 .Rhistory
 .Rapp.history
-
+/real-data/test.R
+/real-data/data/ans.RData
 # Session Data files
 .RData
 
