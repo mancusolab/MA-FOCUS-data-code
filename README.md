@@ -4,6 +4,10 @@ Please follow below instructions in order to replicate both our simulation and r
 
 If you have any questions, please contact Zeyun Lu at zeyunlu@usc.edu or Nicholas Mancuso at Nicholas.Mancuso@med.usc.edu.
 
+```diff
+- We detest usage of our software or scientific outcome to promote racial discrimination.
+```
+
 ## Main Figures
 
 You can find Figure 1 and Figure S1 in `/mainfigure/*`, and see below for other other figures.
