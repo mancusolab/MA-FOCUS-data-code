@@ -49,7 +49,7 @@ theme_corr <- function() {
 
 # shared architecture: correlation between pop
 # plot m4 and s12
-genoadd <- read_tsv("./data/genoa_heritability.tsv")
+genoadd <- read_tsv("./data/genoa_heritability_analyzed.tsv")
 
 genoadd1 <- genoadd %>%
   select(GENE, POP, HSQ) %>%
@@ -190,7 +190,8 @@ a <- twas_all %>%
 
 ps161 <- ggplot(a, aes(x = EA, y = AA)) +
   geom_point() +
-  stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau")) +
+  stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"),
+    label.x = -0.05, label.y=-0.1, label.sep = "\n") +
   geom_smooth(method = "lm") +
   theme_ma() +
   xlab("EA Norm. TWAS Z") +
@@ -199,12 +200,14 @@ ps161 <- ggplot(a, aes(x = EA, y = AA)) +
 # by trait
 ps162 <- ggplot(a, aes(x = EA, y = AA)) +
   geom_point() +
-  stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau")) +
+  stat_cor(method = "pearson", cor.coef.name = c("r", "rho", "tau"),
+    label.x = -0.05, label.y=-0.1, label.sep = "\n") +
   geom_smooth(method = "lm") +
   facet_wrap(~PHEN, nrow = 5) +
   theme_ma() +
   xlab("EA Norm. TWAS Z") +
-  ylab("AA Norm. TWAS Z")
+  ylab("AA Norm. TWAS Z") +
+  ylim(-0.15,0.05)
 
 
 ps16 <- ggarrange(ps161, ps162, nrow = 2, labels = c("A", "B"), heights = c(1.3, 3),
